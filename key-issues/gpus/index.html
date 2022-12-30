@@ -1,0 +1,1080 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Packaging projects with GPU code - pypackaging-native</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#packaging-projects-with-gpu-code" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="pypackaging-native" class="md-header__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pypackaging-native
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Packaging projects with GPU code
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pypackaging-native" class="md-nav__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    pypackaging-native
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Meta topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Meta topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Meta topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/build_steps_conceptual/" class="md-nav__link">
+        Build & package management concepts and terminology
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/purposes_of_pypi/" class="md-nav__link">
+        The multiple purposes of PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/pypi_social_model/" class="md-nav__link">
+        PyPI's author-led social model and its limitations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/no_build_farm/" class="md-nav__link">
+        Lack of a build farm for PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/user_expectations_wheels/" class="md-nav__link">
+        Expectations that projects provide ever more wheels
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Key issues
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Key issues" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Key issues
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          Native dependencies
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Native dependencies" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          Native dependencies
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-dependencies/" class="md-nav__link">
+        Native dependencies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-dependencies/blas_openmp/" class="md-nav__link">
+        BLAS, LAPACK and OpenMP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-dependencies/geospatial_stack/" class="md-nav__link">
+        The Geospatial stack
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-dependencies/cpp_deps/" class="md-nav__link">
+        Complex C++ dependencies
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../abi/" class="md-nav__link">
+        Depending on packages for which an ABI matters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Packaging projects with GPU code
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Packaging projects with GPU code
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#current-state" class="md-nav__link">
+    Current state
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems" class="md-nav__link">
+    Problems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    History
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relevant-resources" class="md-nav__link">
+    Relevant resources
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#potential-solutions-or-mitigations" class="md-nav__link">
+    Potential solutions or mitigations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pypi_metadata_handling/" class="md-nav__link">
+        Metadata handling on PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simd_support/" class="md-nav__link">
+        Distributing a package containing SIMD code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unexpected_fromsource_builds/" class="md-nav__link">
+        Unsuspecting users getting failing from-source builds
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../other_issues/" class="md-nav__link">
+        Other issues
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Background
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Background" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Background
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../background/binary_interface/" class="md-nav__link">
+        Application Binary Interface (ABI)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../background/compilation_concepts/" class="md-nav__link">
+        Basic code compilation concepts
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/" class="md-nav__link">
+        References
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        Glossary
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#current-state" class="md-nav__link">
+    Current state
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems" class="md-nav__link">
+    Problems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    History
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relevant-resources" class="md-nav__link">
+    Relevant resources
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#potential-solutions-or-mitigations" class="md-nav__link">
+    Potential solutions or mitigations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/pypackaging-native/pypackaging-native/edit/master/docs/key-issues/gpus.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="packaging-projects-with-gpu-code">Packaging projects with GPU code</h1>
+<p>Modern <a href="https://en.wikipedia.org/wiki/Graphics_processing_unit">Graphics Processing Units</a>
+(GPUs) can be used, in addition to their original purpose (rendering graphics),
+for high-performance numerical computing. They are particularly important for
+deep learning, but also widely used for data science and traditional scientific
+computing and image processing application.</p>
+<p>GPUs from NVIDIA using the <a href="https://en.wikipedia.org/wiki/CUDA">CUDA</a>
+programming language are dominant in deep learning and scientific computing as
+of today. With both AMD and Intel releasing GPUs and other programming
+languages for them (<a href="https://en.wikipedia.org/wiki/ROCm">ROCm</a>,
+<a href="https://en.wikipedia.org/wiki/SYCL">SYCL</a>,
+<a href="https://en.wikipedia.org/wiki/OpenCL">OpenCL</a>), the landscape may become more diverse in the future.
+In addtion, Google provides
+<a href="https://en.wikipedia.org/wiki/Tensor_Processing_Unit">Tensor Processing Units</a>
+access in Google Cloud Platform, and a host of startups are developing custom
+accelerator hardware for high-performance computing applications.</p>
+<p>Prominent projects which rely on GPUs and are either Python-only or widely used
+from Python include <a href="https://www.tensorflow.org/">TensorFlow</a>,
+<a href="https://pytorch.org/">PyTorch</a>, <a href="https://cupy.dev/">CuPy</a>,
+<a href="https://github.com/google/jax">JAX</a>, <a href="https://rapids.ai/">RAPIDS</a>,
+<a href="https://mxnet.incubator.apache.org">MXNet</a>, <a href="https://xgboost.ai/">XGBoost</a>,
+<a href="https://numba.pydata.org/">Numba</a>, <a href="https://opencv.org/">OpenCV</a>,
+<a href="https://horovod.ai/">Horovod</a> and <a href="https://www.pymc.io">PyMC</a>.</p>
+<p>Packaging such projects for PyPI has been, and still is, quite challenging.</p>
+<h2 id="current-state">Current state</h2>
+<p>As of December 2022, PyPI and Python packaging tools are completely unaware of
+GPUs, and of CUDA. There is no way to mark a package as needing a GPU in sdist
+or wheel metadata, or as containing GPU-specific code (CUDA or otherwise). A
+GPU is hardware that may or may not be present in a machine that a Python
+package is being installed on - <code>pip</code> and other installers are unaware of this.
+If wheels contain CUDA code, they require CUDA Toolkit (a specific version of
+it at that) to be installed. Again, installers do not know this and there is no
+way to express this dependency. The same will be true for ROCm and other types
+of GPU hardware and languages.</p>
+<p>NVIDIA has made steps towards better support for CUDA on PyPI, through
+CUDA Python (<a href="https://developer.nvidia.com/cuda-python">website</a>, 
+<a href="https://pypi.org/project/cuda-python">PyPI package</a>), however this is quite
+new and not used by other projects (nor does it target large projects like
+PyTorch and TensorFlow). For most of its own projects, it uses a
+<a href="https://pypi.org/project/nvidia-pyindex/">Private PyPI Index</a> - and that also
+includes rebuilds of TensorFlow and other packages.</p>
+<p>A single CUDA version supports a reasonable range of GPU architectures. New
+CUDA versions get released regularly, and - because they come with increased
+performance or new functionality - it may be necessary or desirable to build
+new wheels for that CUDA version. If only the supported CUDA version is
+different between two wheels, the wheel tags and filename will be identical.
+Hence it is not possible to upload more than one of those wheels under the same
+package name. To work around that, a project may either support only one CUDA
+version on PyPI, or create different packages. PyTorch and TensorFlow do the
+former, with TensorFlow supporting only a single CUDA version, and PyTorch
+providing more wheels for other CUDA versions and a CPU-only version in a
+separate wheelhouse (see
+<a href="https://pytorch.org/get-started/locally/">pytorch.org/get-started</a>).
+CuPy provides a number of packages: <a href="https://pypi.org/project/cupy/"><code>cupy</code></a>,
+<a href="https://pypi.org/project/cupy-cuda102/"><code>cupy-cuda102</code></a>,
+<a href="https://pypi.org/project/cupy-cuda1110/"><code>cupy-cuda110</code></a>,
+<a href="https://pypi.org/project/cupy-cuda111/"><code>cupy-cuda111</code></a>,
+<a href="https://pypi.org/project/cupy-cuda11x/"><code>cupy-cuda11x</code></a>,
+<a href="https://pypi.org/project/cupy-rocm-4-3/"><code>cupy-rocm-4-3</code></a>,
+<a href="https://pypi.org/project/cupy-rocm-5-0/"><code>cupy-rocm-5-0</code></a>.
+Other projects do similar things - none of it works very well.</p>
+<p>GPU packages tend to result in very large wheels. This is true in particular
+for deep learning packages, because they link in
+<a href="https://developer.nvidia.com/cudnn">cuDNN</a>. For example, the most recent
+<code>manylinux2014</code> wheels for TensorFlow are 588 MB
+(<a href="https://pypi.org/project/tensorflow/2.11.0/#files">2.11.0 files</a>), and for
+PyTorch those are 890 MB (<a href="https://pypi.org/project/tensorflow/2.11.0/#files">1.13.0
+files</a>). The problems around
+and causes of GPU wheel sizes were discussed in depth in
+<a href="https://discuss.python.org/t/what-to-do-about-gpus-and-the-built-distributions-that-support-them/7125">this Packaging thread on Discourse</a>.</p>
+<p>So far we have only discussed individual projects containing GPU code. Those
+projects are the most fundamental libraries in larger stacks of packages
+(perhaps even whole ecosystems). Hence, other projects will want to declare a
+dependency on them. This is currently quite difficult, because of the implicit
+coupling through a shared CUDA version. If a project like PyTorch releases a
+new version and bumps the default CUDA version used in the <code>torch</code> wheels, then
+any downstream package which also contains CUDA code will break unless it has
+an exact <code>==</code> pin on the older <code>torch</code> version, and then releases a new version
+of its own for the new CUDA version. Such synchronized releases are hard to do.
+If there where a way to declare a dependency on CUDA version (e.g., through a
+metapackage on PyPI), that strong coupling between packages would not be
+necessary.</p>
+<p>Other package managers typically do have support for CUDA:</p>
+<ul>
+<li>Conda: provides all CUDA versions through a <a href="https://anaconda.org/conda-forge/cudatoolkit"><code>cudatoolkit</code> conda-forge package</a>
+  and a virtual <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-virtual.html#managing-virtual-packages"><code>__cuda</code> package</a>,</li>
+<li>Spack: supports building with or without CUDA, and allows specifying
+  supported GPU architectures:
+  <a href="https://spack.readthedocs.io/en/latest/build_systems/cudapackage.html#cuda">docs</a>.
+  CUDA itself can be specified as externally provided, and is recommended to be
+  installed directly from NVIDIA: <a href="https://spack.readthedocs.io/en/latest/containers.html#cuda">docs</a>.
+  ROCm is supported <a href="https://spack.readthedocs.io/en/latest/build_systems/rocmpackage.html">in a similar fashion</a>,</li>
+<li>Ubuntu: provides one CUDA version per Ubuntu release: <a href="https://packages.ubuntu.com/jammy/nvidia-cuda-toolkit"><code>nvidia-cuda-toolkit</code> package</a>,</li>
+<li>Arch Linux: provides one CUDA version: <a href="https://archlinux.org/packages/community/x86_64/cuda/"><code>cuda</code> package</a>.</li>
+</ul>
+<p>Those package managers typically also provide CUDA-related development tools,
+and build all the most popular deep learning and numerical computing packages
+for the CUDA version they ship.</p>
+<h2 id="problems">Problems</h2>
+<p>The problems around GPU packages include:</p>
+<p>User-friendliness:</p>
+<ul>
+<li>Installs depend on a specific CUDA or ROCm version, and <code>pip</code> does
+  not know about this. Hence installs may succeed, followed by errors at
+  runtime,</li>
+<li>CUDA or ROCm must be installed through another package manager or a direct
+  download from the vendor. And the other package manager upgrading CUDA or
+  ROCm may silently break the installed Python package,</li>
+<li>Wheels may have to come from a separate wheelhouse, requiring install commands like
+  <code>python -m pip install torch --extra-index-url https://download.pytorch.org/whl/cu116</code>
+  which are easy to get wrong,</li>
+<li>The very large download sizes are problematic for users on slow network
+  connections or plans with a maximum amount of bandwidth usage for a given
+  month (<code>pip</code> potentially downloading multiple wheels because of backtracking
+  in the resolver is extra painful here).</li>
+</ul>
+<p>Maintainer effort:</p>
+<ul>
+<li>Keeping wheel sizes below either the 1 GB hard limit or the current PyPI file
+  size or total project size limits can be a lot of work (or even impossible),</li>
+<li>Hosting your own wheelhouse to support multiple CUDA or ROCm versions is a
+  lot of work,</li>
+<li>Depending on another GPU package is difficult, and likely requires a <code>==</code> pin,</li>
+<li>A dependendency on CUDA, ROCm, or a specific version of them cannot be
+  expressed in metadata, hence maintaining build environments is more
+  error-prone than it has to be.</li>
+</ul>
+<p>For PyPI itself:</p>
+<ul>
+<li>The large amount of space and bandwidth consumed by GPU packages.
+  <a href="https://pypi.org/stats/">pypi.org/stats</a> shows under "top projects by total
+  package size" that many of the largest package are GPU ones, and that
+  together they consume a significant fraction (estimated at ~20% for the ones
+  listed in the top 100) of the total size for all of PyPI.</li>
+</ul>
+<h2 id="history">History</h2>
+<p>Support for GPUs and CUDA has been discussed on and off on distutils-sig and the Packaging Discourse:</p>
+<ul>
+<li><a href="https://mail.python.org/archives/list/distutils-sig@python.org/thread/LXLF4YSC4WUZOYRX65DW7CESIX7UUBK5/#LXLF4YSC4WUZOYRX65DW7CESIX7UUBK5">Environment markers for GPU/CUDA availibility</a>
+  thread on distutils-sig (2018),</li>
+<li><a href="https://discuss.python.org/t/the-next-manylinux-specification/1043/42?u=rgommers">The next manylinux specification</a>
+  thread on Discourse (2019), with a specific comment about presence/absence of
+  GPU hardware and CUDA libraries being out of scope,</li>
+<li><a href="https://discuss.python.org/t/what-to-do-about-gpus-and-the-built-distributions-that-support-them/7125">What to do about GPUs? (and the built distributions that support them)</a>
+  on a Packaging thread on Discourse (2021),</li>
+</ul>
+<p>None of the suggested ideas in those threads gained traction, mostly due to a
+combination of the complexity of the problem, difficulty of implementing
+support in packaging tools, and lack of people to work on a solution.</p>
+<h2 id="relevant-resources">Relevant resources</h2>
+<p>TODO</p>
+<h2 id="potential-solutions-or-mitigations">Potential solutions or mitigations</h2>
+<p>Potential solutions on the PyPI side include:</p>
+<ul>
+<li>add specific wheel tags or metadata for the most popular libraries,</li>
+<li>make an environment marker or selector package approach work,</li>
+<li>improve interoperability with other package managers, in order to be able to
+  declare a dependency on a CUDA or ROCm version as externally provided,</li>
+</ul>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 20, 2022</span>
+      
+        <br>
+        Created:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 20, 2022</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../abi/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Depending on packages for which an ABI matters" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Depending on packages for which an ABI matters
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../pypi_metadata_handling/" class="md-footer__link md-footer__link--next" aria-label="Next: Metadata handling on PyPI" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Metadata handling on PyPI
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022 Quansight Labs & open source contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native/blob/main/LICENSE" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 10a3.04 3.04 0 0 1 3-3 3.04 3.04 0 0 1 3 3 3.04 3.04 0 0 1-3 3 3.04 3.04 0 0 1-3-3m3 9 4 1v-3.08A7.54 7.54 0 0 1 12 18a7.54 7.54 0 0 1-4-1.08V20m4-16a5.78 5.78 0 0 0-4.24 1.74A5.78 5.78 0 0 0 6 10a5.78 5.78 0 0 0 1.76 4.23A5.78 5.78 0 0 0 12 16a5.78 5.78 0 0 0 4.24-1.77A5.78 5.78 0 0 0 18 10a5.78 5.78 0 0 0-1.76-4.26A5.78 5.78 0 0 0 12 4m8 6a8.04 8.04 0 0 1-.57 2.8A7.84 7.84 0 0 1 18 15.28V23l-6-2-6 2v-7.72A7.9 7.9 0 0 1 4 10a7.68 7.68 0 0 1 2.33-5.64A7.73 7.73 0 0 1 12 2a7.73 7.73 0 0 1 5.67 2.36A7.68 7.68 0 0 1 20 10Z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

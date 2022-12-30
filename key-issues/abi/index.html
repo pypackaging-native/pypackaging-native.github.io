@@ -1,0 +1,1241 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Depending on packages for which an ABI matters - pypackaging-native</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#depending-on-packages-for-which-an-abi-matters" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="pypackaging-native" class="md-header__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pypackaging-native
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Depending on packages for which an ABI matters
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pypackaging-native" class="md-nav__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    pypackaging-native
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Meta topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Meta topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Meta topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/build_steps_conceptual/" class="md-nav__link">
+        Build & package management concepts and terminology
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/purposes_of_pypi/" class="md-nav__link">
+        The multiple purposes of PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/pypi_social_model/" class="md-nav__link">
+        PyPI's author-led social model and its limitations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/no_build_farm/" class="md-nav__link">
+        Lack of a build farm for PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/user_expectations_wheels/" class="md-nav__link">
+        Expectations that projects provide ever more wheels
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Key issues
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Key issues" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Key issues
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          Native dependencies
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Native dependencies" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          Native dependencies
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-dependencies/" class="md-nav__link">
+        Native dependencies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-dependencies/blas_openmp/" class="md-nav__link">
+        BLAS, LAPACK and OpenMP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-dependencies/geospatial_stack/" class="md-nav__link">
+        The Geospatial stack
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../native-dependencies/cpp_deps/" class="md-nav__link">
+        Complex C++ dependencies
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Depending on packages for which an ABI matters
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Depending on packages for which an ABI matters
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#current-state" class="md-nav__link">
+    Current state
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems" class="md-nav__link">
+    Problems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    History
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relevant-resources" class="md-nav__link">
+    Relevant resources
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#potential-solutions-or-mitigations" class="md-nav__link">
+    Potential solutions or mitigations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpus/" class="md-nav__link">
+        Packaging projects with GPU code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pypi_metadata_handling/" class="md-nav__link">
+        Metadata handling on PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simd_support/" class="md-nav__link">
+        Distributing a package containing SIMD code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unexpected_fromsource_builds/" class="md-nav__link">
+        Unsuspecting users getting failing from-source builds
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../other_issues/" class="md-nav__link">
+        Other issues
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Background
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Background" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Background
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../background/binary_interface/" class="md-nav__link">
+        Application Binary Interface (ABI)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../background/compilation_concepts/" class="md-nav__link">
+        Basic code compilation concepts
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/" class="md-nav__link">
+        References
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        Glossary
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#current-state" class="md-nav__link">
+    Current state
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems" class="md-nav__link">
+    Problems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    History
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relevant-resources" class="md-nav__link">
+    Relevant resources
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#potential-solutions-or-mitigations" class="md-nav__link">
+    Potential solutions or mitigations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/pypackaging-native/pypackaging-native/edit/master/docs/key-issues/abi.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="depending-on-packages-for-which-an-abi-matters">Depending on packages for which an ABI matters</h1>
+<p>When a library exposes an API in a compiled language, any other library or
+package that uses that API has to concern themselves with the
+<a href="https://en.wikipedia.org/wiki/Application_binary_interface">ABI</a> (Application
+Binary Interface) as soon as the API provider and API consumer are distributed
+separately. As a rule, it's best for ABI compatibility if the different
+packages are built with the same compiler toolchain, command-line flags and
+other configuration options. If that is not possible or guaranteed, one has to
+start thinking carefully about whether the two build environments will result
+in packages that are ABI-compatible.</p>
+<p>There are a lot of things with an ABI that a Python library maintainer may have
+to care about:</p>
+<ul>
+<li>The C standard library (the <code>libc</code> flavor)</li>
+<li>The C++ standard library (<code>libstdc++</code> old vs. new string ABI, <code>libc++</code>, MSVC runtime, etc.)</li>
+<li>Fortran (gfortran vs. g77 ABI)</li>
+<li>CPython</li>
+<li>Python packages with C APIs: (NumPy, SciPy)</li>
+<li>Python packages with C++ APIs (PyTorch, Apache Arrow - see
+  <a href="../native-dependencies/cpp_deps/">complex C++ dependencies</a>)</li>
+<li>Common non-Python dependencies for scientific computing
+  <a href="../native-dependencies/blas_openmp/">BLAS, LAPACK, OpenMP</a>,
+  MPI<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> (see <a href="https://www.mpich.org/abi/">mpich.org/abi</a>).</li>
+</ul>
+<p>As an example of an ABI issue that many Python developers will encounter: a
+debug build of CPython is not ABI-compatible with a release build, hence if one
+wants to use a debug Python, one has to rebuild every package that uses the
+Python C API.</p>
+<h2 id="current-state">Current state</h2>
+<p>A package manager has to know about ABI, either implicitly or explicitly. In
+the case of PyPI, it's implicit. There are conventions that anyone publishing a
+wheel should adhere to. For example, on Windows and macOS, use compilers and
+flags compatible with those used to produce the Python installers published on
+<a href="https://www.python.org/downloads/">python.org</a>. And on Linux, what the various
+manylinux PEPs say (more complex, so best to use the <code>manylinux</code>-provided
+Docker images).</p>
+<p>Other package managers are more explicit about managing ABI, to varying
+degrees. They also have the advantage of being able to enforce using a
+consistent compiler toolchain. Inspecting the dependency tree of a SciPy
+install (which uses the Python and NumPy C APIs/ABIs) will show this:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">PyPI</label><label for="__tabbed_1_2">conda-forge</label><label for="__tabbed_1_3">Spack</label><label for="__tabbed_1_4">Arch Linux</label><label for="__tabbed_1_5">Homebrew</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>$ pipdeptree -p scipy
+<span class="nv">scipy</span><span class="o">==</span><span class="m">1</span>.9.3
+  - numpy <span class="o">[</span>required: &gt;<span class="o">=</span><span class="m">1</span>.18.5,&lt;<span class="m">1</span>.26.0, installed: <span class="m">1</span>.23.5<span class="o">]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>$ <span class="c1"># Note: output edited to remove duplicate packages and python&#39;s dependencies</span>
+$ mamba repoquery depends scipy --tree
+
+scipy<span class="o">[</span><span class="m">1</span>.9.3<span class="o">]</span>
+  ├─ libgfortran-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
+  │  └─ libgfortran5<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
+  ├─ libgcc-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
+  │  ├─ _libgcc_mutex<span class="o">[</span><span class="m">0</span>.1<span class="o">]</span>
+  │  └─ _openmp_mutex<span class="o">[</span><span class="m">4</span>.5<span class="o">]</span>
+  │     └─ llvm-openmp<span class="o">[</span><span class="m">14</span>.0.4<span class="o">]</span>
+  │        └─ libzlib<span class="o">[</span><span class="m">1</span>.2.13<span class="o">]</span>
+  ├─ libstdcxx-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
+  ├─ python_abi<span class="o">[</span><span class="m">3</span>.10<span class="o">]</span>
+  │  └─ python<span class="o">[</span><span class="m">3</span>.10.8<span class="o">]</span>
+  └─ numpy<span class="o">[</span><span class="m">1</span>.23.3<span class="o">]</span>
+     ├─ libblas<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
+     │  └─ libopenblas<span class="o">[</span><span class="m">0</span>.3.21<span class="o">]</span>
+     ├─ libcblas<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
+     ├─ liblapack<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
+  ├─ libblas already visited
+  ├─ liblapack already visited
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>$ <span class="c1"># Note: output edited to remove build-only dependencies</span>
+$ ./spack spec py-scipy%gcc
+
+py-scipy@1.9.2%gcc@12.2.0 <span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
+    ^openblas@0.3.21%gcc@12.2.0~bignuma~consistent_fpcsr+fortran~ilp64+locking+pic+shared <span class="nv">symbol_suffix</span><span class="o">=</span>none <span class="nv">threads</span><span class="o">=</span>none <span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
+    ^python@3.9.13%gcc@12.2.0+bz2+ctypes+dbm~debug+libxml2+lzma~nis~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~tix~tkinter~ucs4+uuid+zlib <span class="nv">patches</span><span class="o">=</span>0d98e93,4c24573,f2fd060 <span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
+    ^py-numpy@1.23.3%gcc@12.2.0+blas+lapack <span class="nv">patches</span><span class="o">=</span>873745d <span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>$ <span class="c1"># Note: output edited to remove duplicates and some transitive dependencies</span>
+$ pactree python-scipy
+
+python-scipy
+└─python-numpy
+  ├─cblas
+  │ └─openblas provides blas
+  │   └─gcc-libs
+  │     └─glibc&gt;<span class="o">=</span><span class="m">2</span>.27
+  ├─lapack
+  │ └─openblas provides blas
+  └─python
+    ├─bzip2
+    │ ├─glibc
+    ├─expat
+    ├─gdbm
+    ├─libffi
+    ├─libnsl
+    ├─libxcrypt
+    ├─openssl
+    └─zlib
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>% <span class="c1"># Note: output edited to remove duplicate packages</span>
+% brew deps --tree --installed scipy
+
+scipy
+├── gcc
+│   ├── gmp
+│   ├── isl
+│   ├── libmpc
+│   ├── mpfr
+│   └── zstd
+│       ├── lz4
+│       └── xz
+├── numpy
+│   └── openblas
+│       └── gcc
+├── openblas
+│   └── gcc
+└── python@3.11
+    ├── mpdecimal
+    ├── openssl@1.1
+    ├── sqlite
+    └── xz
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>For example, we see <code>python_abi</code> and <code>libgcc_mutex</code> in the conda-forge output;
+detailed compiler, BLAS interface, CPU architecture and library info in the
+Spack output; and <code>glibc</code> version info in the Arch Linux output.</p>
+<p>In general, the more dependencies and more languages one uses, the more ABI
+compatibility starts to matter. If the Python C API is the only thing used by a
+package, the rules are relatively straightforward: rebuild for every minor
+Python version (unless one can use the
+<a href="https://docs.python.org/3/c-api/stable.html">limited API</a>, then it's even
+easier), with compatible compilers.</p>
+<p>It already gets a lot harder as soon as one uses the NumPy C API. Which many
+packages do, often via Cython. While the NumPy ABI is much more stable than the
+CPython one (NumPy hasn't broken compatibility in a nontrivial way in over a
+decade), one still has to understand the rules for building against NumPy:</p>
+<div class="admonition example">
+<p class="admonition-title">Example: Using the NumPy C API</p>
+<p>NumPy has a C API, which Cython, SciPy, and many other packages use. That
+ABI is forward but not backward compatible, meaning if you use it then you
+must build your wheels against the lowest NumPy version that you expect
+your users to use. So if you build against version <code>1.X.Y</code> then the runtime
+requirement you get is <code>numpy&gt;=1.X.Y</code>. That lowest version may depend on
+Python version and platform. There is no good way to express a dependency
+like that in <code>pyproject.toml</code>, or even to keep track of what the lowest
+version should be. Because of that, the
+<a href="https://github.com/scipy/oldest-supported-numpy/"><code>oldest-supported-numpy</code></a>
+metapackage is being used by projects that depend on <code>numpy</code> as an
+imperfect hack to obtain the correct <code>numpy==</code> build requirement pins per
+Python version and platform. It can be used like so:</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">[build-system]</span><span class="w"></span>
+<span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;oldest-supported-numpy&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># your other build requirements here</span><span class="w"></span>
+<span class="p">]</span><span class="w"></span>
+</code></pre></div>
+Each time NumPy adds support for a new Python version or platform,
+<code>oldest-supported-numpy</code> is updated so that each user of the NumPy C API
+does not have to do that.</p>
+<p>Despite this complexity, the solution is imperfect -
+<code>oldest-supported-numpy</code> is unable to communicate back the correct
+<code>numpy&gt;=</code> runtime requirement, so those requirements are generally
+incorrect for all packages using NumPy (all wheels will have a generic
+<code>numpy&gt;=1.Y.Z</code> for the lowest value of <code>1.Y.Z</code> across all wheels).</p>
+<p>See <a href="https://numpy.org/devdocs/dev/depending_on_numpy.html#adding-a-dependency-on-numpy">Adding a dependency on NumPy</a>
+for more details.</p>
+</div>
+<p>The most difficult cases arise with dependencies outside of Python/PyPI (also see
+<a href="../native-dependencies/">native dependencies</a>). At that point one can
+pick up arbitrary libraries during the build phase of a package, and with
+complex dependencies the ABI of that dependency may be unknown or have to be
+introspected. <a href="https://conference.scipy.org/proceedings/scipy2015/pdfs/ian_henriksen.pdf">This paper on SciPy's Cython API for BLAS and LAPACK</a>
+explains how and why SciPy added a Cython API to hide the ABI variations across
+BLAS/LAPACK implementations from other Python packages.</p>
+<p>These three "levels of complexity" cases are illustrated by these diagrams of
+package stacks:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">pure Python only</label><label for="__tabbed_2_2">pure &amp; C API-using</label><label for="__tabbed_2_3">complete stack</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><img alt="Anchoring a package stack - pure Python only" src="../../assets/images/anchoring_a_package_stack_pure_only.png#only-light" />
+<img alt="Anchoring a package stack - pure Python only" src="../../assets/images/anchoring_a_package_stack_pure_only_darkmode.png#only-dark" />
+<figcaption>
+Package stack: CPython and pure Python packages only
+</figcaption></p>
+</div>
+<div class="tabbed-block">
+<p><img alt="Anchoring a package stack - pure Python only" src="../../assets/images/anchoring_a_package_stack_pure_plat.png#only-light" />
+<img alt="Anchoring a package stack - pure Python only" src="../../assets/images/anchoring_a_package_stack_pure_plat_darkmode.png#only-dark" />
+<figcaption>
+Package stack: CPython, pure Python &amp; Python C API-using packages
+</figcaption></p>
+</div>
+<div class="tabbed-block">
+<p><img alt="Anchoring a package stack - pure Python only" src="../../assets/images/anchoring_a_package_stack_full.png#only-light" />
+<img alt="Anchoring a package stack - pure Python only" src="../../assets/images/anchoring_a_package_stack_full_darkmode.png#only-dark" />
+<figcaption>
+Package stack: all the way down to <code>libc</code>
+</figcaption></p>
+</div>
+</div>
+</div>
+<p>C++ APIs are a problem onto themselves. When a library is written in C++ but
+wants to expose an API with a stable ABI, it often exposes a C rather than a
+C++ API with <code>extern "C"</code>. Keeping ABI stability has a large cost though, it
+takes a lot of extra work and may prevent changes to internals of a library.
+Hence it's not always done. For example, PyTorch has a large C++ API and does
+not promise any ABI stability:</p>
+<div class="admonition example">
+<p class="admonition-title">Example: Using the PyTorch C++ API</p>
+<p>PyTorch is mostly written in C++, and exposes a C++ API in addition to its Python API.
+C++ ABI stability is a tricky topic - it's implementation-defined, and
+because name mangling can change between compilers (or even compiler
+versions), mixing binaries built with different compilers isn't possible.
+PyTorch does not attempt to provide a stable ABI; even bug fix releases
+aren't guaranteed to be compatible. As a result, all packages using
+PyTorch's C API must use a runtime requirement like:
+<div class="highlight"><pre><span></span><code><span class="k">[project]</span><span class="w"></span>
+<span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;torch == X.Y.Z&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># X.Y.Z is the version of PyTorch used to build against</span><span class="w"></span>
+<span class="p">]</span><span class="w"></span>
+</code></pre></div></p>
+<p>This requirement also implies <em>synchronized releases</em>. If PyTorch does a
+new release, the team ensures that simultaneous releases of <code>torchvision</code>,
+<code>torchaudio</code>, <code>torchtext</code>, <code>torchdata</code> and other dependent packages are
+made. This level of coordination doesn't scale well though, and therefore
+may limit the use of the PyTorch C++ API - especially by community open
+source projects whose authors may not have the bandwidth to keep up with
+releases.</p>
+<p>The project description for <a href="https://pypi.org/project/torchvision/">pypi/torchvision</a>
+is a good example to illustrate the tight version coupling.</p>
+</div>
+<h2 id="problems">Problems</h2>
+<p>A problem for PyPI and wheels is that there is little coordination on compiler
+toolchains, ABI changes, etc. So maintainers of every package are on their own
+trying to figure this out. Other package managers don't have this problem -
+they build everything with a consistent toolchain (as much as possible at
+least), either including <code>libc</code> or on top of the <code>libc</code> provided by the
+operating system. See <a href="../../meta-topics/no_build_farm/">no build farm</a> and
+<a href="../../meta-topics/pypi_social_model/">PyPI's author-led social model</a> for more details.</p>
+<p>CPython breaks its ABI every minor release (unless one's needs are limited,
+then there is the limited API). This has a huge cost: packages have to build
+wheels for every minor Python release.</p>
+<p>NumPy is effectively forced to do the opposite: NumPy needs to <em>not</em>
+break its ABI in order to avoid exploding the build matrix of every project
+using its C API. This has a large opportunity cost; there are a lot of
+improvements and cleanups that NumPy cannot implement. If PyPI either had a
+build farm or could be disregarded for binaries with ABI stability
+requirements, NumPy would have broken ABI compatibility multiple times by
+now<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>, with positive impacts on maintainability, performance, and
+functionality.</p>
+<p>Python packaging build tooling has no understanding of ABI constraints, making it
+hard to add runtime version constraints to a wheel that are correct (and
+tighter than those in the corresponding sdist).</p>
+<p>Manylinux versions still using the old C++ ABI, while most C++ projects want to
+use the new ABI. <code>manylinux_2_28</code> may change this finally, but isn't yet in use.
+See <a href="../native-dependencies/cpp_deps/">complex C++ dependencies</a> for more
+details on this topic.</p>
+<h2 id="history">History</h2>
+<p>TODO</p>
+<h2 id="relevant-resources">Relevant resources</h2>
+<ul>
+<li><a href="https://conference.scipy.org/proceedings/scipy2015/pdfs/ian_henriksen.pdf">"Circumventing the Linker: using SciPy’s BLAS and LAPACK within Cython"</a>,
+  Ian Henriksen, SciPy 2015.</li>
+<li><a href="https://tgamblin.github.io/pubs/archspec-canopie-hpc-2020.pdf">"<code>archspec</code>: A library for detecting, labeling, and reasoning about microarchitectures"</a>,
+  Culpo et al. (2020).</li>
+<li><a href="https://learn.microsoft.com/en-us/cpp/porting/binary-compat-2015-2017?view=msvc-170">"C++ binary compatibility between Visual Studio versions"</a></li>
+<li>GCC docs on <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html"><code>libstdc++</code> dual ABI</a>
+  and on <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/abi.html">ABI Policy and Guidelines</a>.</li>
+<li>NumPy docs <a href="https://numpy.org/devdocs/dev/depending_on_numpy.html">for downstream package authors</a>.</li>
+<li><a href="https://peps.python.org/pep-0384/">PEP 384 - Defining a Stable ABI</a>.</li>
+<li><a href="https://peps.python.org/pep-0652/">PEP 652 - Maintaining the Stable ABI</a>.</li>
+<li>Python docs on <a href="https://docs.python.org/3/c-api/stable.html">C API Stability</a>.</li>
+<li><a href="https://discuss.python.org/t/lets-get-rid-of-the-stable-abi-but-keep-the-limited-api/18458">"Let’s get rid of the stable ABI, but keep the limited API"</a>
+  thread on Discourse (2022).</li>
+<li><a href="https://github.com/trailofbits/abi3audit">trailofbits/abi3audit</a>.</li>
+<li><a href="https://blog.trailofbits.com/2022/11/15/python-wheels-abi-abi3audit/">"ABI compatibility in Python: How hard could it be?"</a> (2022).</li>
+<li><a href="https://hpyproject.org/">HPy - A better C API for Python</a>.</li>
+<li>Conda-forge FAQ entry on <a href="https://conda-forge.org/docs/user/faq.html#faq-abi-incompatibility">"How to handle breaking of a package due to ABI incompatibility?"</a>.</li>
+</ul>
+<h2 id="potential-solutions-or-mitigations">Potential solutions or mitigations</h2>
+<ul>
+<li>Expressing constraints imposed by an ABI on versions at runtime can be done
+  with something like conda-forge's
+  <a href="https://conda-forge.org/docs/maintainer/pinning_deps.html"><code>pin_compatible</code> and <code>run_exports</code> features</a>.
+  See <a href="https://github.com/mesonbuild/meson-python/issues/29">meson-python#29</a>
+  for ideas about implementing that in a build backend.</li>
+<li>HPy and its <a href="https://docs.hpyproject.org/en/latest/overview.html#target-abis">hybrid and universal ABIs</a>
+  may be the way forward for improvements in constraints that the CPython ABI
+  imposes, as well as enabling use of alternative interpreters.</li>
+<li>Coordinated rebuilds that are needed because of <code>==</code> runtime constraints
+  would be a lot easier with a build farm (as discussed
+  <a href="../../meta-topics/no_build_farm/">here</a>).</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><code>h5py</code> is an example of a project that support MPI but, despite regular
+user requests, does not ship MPI-enabled wheels. MPI has multiple
+implementations, and does not have a stable ABI (see, e.g.,
+<a href="https://github.com/mpi-forum/mpi-issues/issues/654">mpi-issues#654</a> for
+(lack of) MPI ABI stability).&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Actually, NumPy did break its ABI once, in the 1.4.0 release (2010). This
+resulted in some mayhem and very long and painful discussions. The ABI was
+unbroken, and hasn't been touched since.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 20, 2022</span>
+      
+        <br>
+        Created:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 20, 2022</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../native-dependencies/cpp_deps/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Complex C++ dependencies" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Complex C++ dependencies
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../gpus/" class="md-footer__link md-footer__link--next" aria-label="Next: Packaging projects with GPU code" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Packaging projects with GPU code
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022 Quansight Labs & open source contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native/blob/main/LICENSE" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 10a3.04 3.04 0 0 1 3-3 3.04 3.04 0 0 1 3 3 3.04 3.04 0 0 1-3 3 3.04 3.04 0 0 1-3-3m3 9 4 1v-3.08A7.54 7.54 0 0 1 12 18a7.54 7.54 0 0 1-4-1.08V20m4-16a5.78 5.78 0 0 0-4.24 1.74A5.78 5.78 0 0 0 6 10a5.78 5.78 0 0 0 1.76 4.23A5.78 5.78 0 0 0 12 16a5.78 5.78 0 0 0 4.24-1.77A5.78 5.78 0 0 0 18 10a5.78 5.78 0 0 0-1.76-4.26A5.78 5.78 0 0 0 12 4m8 6a8.04 8.04 0 0 1-.57 2.8A7.84 7.84 0 0 1 18 15.28V23l-6-2-6 2v-7.72A7.9 7.9 0 0 1 4 10a7.68 7.68 0 0 1 2.33-5.64A7.73 7.73 0 0 1 12 2a7.73 7.73 0 0 1 5.67 2.36A7.68 7.68 0 0 1 20 10Z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

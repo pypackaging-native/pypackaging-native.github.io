@@ -1,0 +1,1161 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>BLAS, LAPACK and OpenMP - pypackaging-native</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#blas-lapack-and-openmp" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="pypackaging-native" class="md-header__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pypackaging-native
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              BLAS, LAPACK and OpenMP
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="pypackaging-native" class="md-nav__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    pypackaging-native
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Meta topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Meta topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Meta topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../meta-topics/build_steps_conceptual/" class="md-nav__link">
+        Build & package management concepts and terminology
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../meta-topics/purposes_of_pypi/" class="md-nav__link">
+        The multiple purposes of PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../meta-topics/pypi_social_model/" class="md-nav__link">
+        PyPI's author-led social model and its limitations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../meta-topics/no_build_farm/" class="md-nav__link">
+        Lack of a build farm for PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../meta-topics/user_expectations_wheels/" class="md-nav__link">
+        Expectations that projects provide ever more wheels
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Key issues
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Key issues" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Key issues
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          Native dependencies
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Native dependencies" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          Native dependencies
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Native dependencies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          BLAS, LAPACK and OpenMP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        BLAS, LAPACK and OpenMP
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#current-state" class="md-nav__link">
+    Current state
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems" class="md-nav__link">
+    Problems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    History
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relevant-resources" class="md-nav__link">
+    Relevant resources
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#potential-solutions-or-mitigations" class="md-nav__link">
+    Potential solutions or mitigations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geospatial_stack/" class="md-nav__link">
+        The Geospatial stack
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp_deps/" class="md-nav__link">
+        Complex C++ dependencies
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../abi/" class="md-nav__link">
+        Depending on packages for which an ABI matters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gpus/" class="md-nav__link">
+        Packaging projects with GPU code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pypi_metadata_handling/" class="md-nav__link">
+        Metadata handling on PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../simd_support/" class="md-nav__link">
+        Distributing a package containing SIMD code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../unexpected_fromsource_builds/" class="md-nav__link">
+        Unsuspecting users getting failing from-source builds
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../other_issues/" class="md-nav__link">
+        Other issues
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Background
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Background" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Background
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../background/binary_interface/" class="md-nav__link">
+        Application Binary Interface (ABI)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../background/compilation_concepts/" class="md-nav__link">
+        Basic code compilation concepts
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../references/" class="md-nav__link">
+        References
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../glossary/" class="md-nav__link">
+        Glossary
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#current-state" class="md-nav__link">
+    Current state
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems" class="md-nav__link">
+    Problems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    History
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relevant-resources" class="md-nav__link">
+    Relevant resources
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#potential-solutions-or-mitigations" class="md-nav__link">
+    Potential solutions or mitigations
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/pypackaging-native/pypackaging-native/edit/master/docs/key-issues/native-dependencies/blas_openmp.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="blas-lapack-and-openmp">BLAS, LAPACK and OpenMP</h1>
+<p>BLAS, LAPACK and OpenMP are key libraries for scientific computing. BLAS and
+LAPACK provide linear algebra functionality, and OpenMP provides primitives for
+parallel computing on shared memory machines. They're written in C, C++,
+Fortran, and even some assembly code. They are typically not packaged on PyPI
+(MKL is the exception). The most popular libraries for BLAS and LAPACK are
+OpenBLAS and MKL; they provide <em>both</em> BLAS and LAPACK<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>. NumPy and SciPy depend
+on BLAS and LAPACK; scikit-learn depends on OpenMP. BLAS and LAPACK libraries
+themselves can be built to use OpenMP <em>or</em> pthreads.</p>
+<p>Two things make dealing with these native dependencies extra challenging:</p>
+<ol>
+<li>There are <em>multiple independent implementations</em> of the BLAS, LAPACK and
+   OpenMP API specifications. They adhere to the same API, but may be built
+   with different ABI, make different choices for symbol names for 64-bit
+   builds, etc.</li>
+<li>All packages in an environment should use <em>the same library</em> for each of
+   BLAS, LAPACK and OpenMP, because otherwise issues with threading control
+   will occur. This is difficult to guarantee if wheels must be self-contained;
+   it's clearly at odds with vendoring.</li>
+</ol>
+<details class="question">
+<summary>What are BLAS and LAPACK exactly?</summary>
+<p>BLAS (Basic Linear Algebra Subprograms) are routines for basic vector and
+matrix operations. LAPACK (Linear Algebra PACKage) builds on top of BLAS
+and provides more complex linear algebra routines. Both have a reference
+implementation in the <a href="https://netlib.org/">Netlib repository</a>, written in
+Fortran: <a href="https://netlib.org/blas/">BLAS</a>,
+<a href="https://netlib.org/lapack/">LAPACK</a>. BLAS also has a reference C API, named
+<a href="https://netlib.org/blas/#_cblas">CBLAS</a> which is widely implemented;
+LAPACK correspondingly has a C API named
+<a href="https://netlib.org/lapack/lapacke.html">LAPACKE</a>, however that is less
+widely implemented.</p>
+<p>A lot of libraries implement the BLAS and LAPACK interfaces. This is
+typically done to obtain maximum performance, and optimized for particular
+hardware. The performance improvements over the Netlib version are often in
+the 10x-100x range, and given how critical linear algebra is to scientific
+computing and deep learning, these libraries and their performance
+characteristics are of major importance.</p>
+<p>Well-known implementations include <a href="https://github.com/xianyi/openblas">OpenBLAS</a>,
+<a href="https://en.wikipedia.org/wiki/Math_Kernel_Library">Intel MKL</a>,
+<a href="https://developer.apple.com/accelerate/">Apple Accelerate</a>,
+<a href="https://math-atlas.sourceforge.net/">ATLAS</a> (no longer updated, but still
+shipped especially by Linux distros), <a href="https://github.com/flame/blis">BLIS</a>
+(BLAS-only) and <a href="https://github.com/flame/libflame">libflame</a> (LAPACK-only,
+builds on BLIS), AMD's
+<a href="https://developer.amd.com/amd-aocl/blas-library/">AOCL-BLIS and AOCL-libFLAME</a>,
+and <a href="https://developer.arm.com/Tools%20and%20Software/Arm%20Performance%20Libraries">ARM Performance Libraries</a>.
+Those are all for CPU; there are more libraries for GPUs and other
+accelerators, as well as libraries supporting sparse and graph data
+structures.</p>
+</details>
+<details class="question">
+<summary>What is OpenMP exactly?</summary>
+<p><a href="https://www.openmp.org/">OpenMP</a> (Open Multi-Processing) is an API that
+supports shared-memory parallel programming in C, C++ and Fortran. It is
+widely used, from regular laptop/desktop to large supercomputers. There are
+many implementations, often shipped together with compilers. Commonly used
+implementations (which we may find vendored in wheels on PyPI) include
+the GCC implementation (<code>libgomp</code>), the LLVM implementation (<code>libomp</code>), and the
+Intel implementation (<code>libiomp</code>). For a comprehensive overview, see
+<a href="https://www.openmp.org/resources/openmp-compilers-tools/">this overview</a>.</p>
+</details>
+<h2 id="current-state">Current state</h2>
+<p>NumPy vendors <a href="https://github.com/xianyi/openblas">OpenBLAS</a> as a shared
+library in the wheels it uploads to PyPI. SciPy also vendors OpenBLAS, in the
+same manner as NumPy - just not the same version, NumPy moved to ILP64 (64-bit)
+OpenBLAS while SciPy uses the default 32-bit build. Those OpenBLAS libraries
+are built with pthreads. In conda-forge and Homebrew on the other hand,
+OpenBLAS is built with OpenMP. The OpenBLAS build for wheels requires a
+separate repository with CI - see
+<a href="https://github.com/MacPython/openblas-libs">macPython/openblas-libs</a>. The
+build is maintained mostly by NumPy and SciPy maintainers - and as can be seen
+from the history in the repository, it's a lot of work.
+To make matters worse, NumPy and SciPy want tight control over the version of
+OpenBLAS they ship with, because another version may cause segfaults or wildly
+incorrect numerical results. Hence upgrading is very hard. Things have gotten
+a little better recently though, and it may be an option to start depending on
+OpenBLAS as a separate package with a version range rather than an exact pin.
+<a href="https://github.com/MacPython/openblas-libs/issues/86">openblas-libs#86</a>
+discussed in-progress work to create a separate wheel for OpenBLAS; not ideal
+to have to maintain that, but an improvement over vendoring separate versions
+in NumPy and SciPy wheels.</p>
+<p>Scikit-learn depends on OpenMP directly for an increasing amount of its
+parallel execution, and vendors <code>libomp</code>/<code>libgomp</code> in its wheels. It depends on
+SciPy for linear algebra functionality - in particular, the Cython interface
+to BLAS and LAPACK that SciPy provides. The scikit-learn team also created 
+<a href="https://github.com/joblib/threadpoolctl"><code>threadpoolctl</code></a>, a separate package
+specifically to control the parallelism across NumPy, SciPy, scikit-learn, and
+any installed BLAS, LAPACK and OpenMP libraries.</p>
+<p>PyTorch statically links MKL (except on macOS) and vendors OpenMP (<code>libiomp</code> on
+Windows/macOS, <code>libgomp</code> on Linux) in its wheels.</p>
+<p>TensorFlow uses <a href="https://eigen.tuxfamily.org">Eigen</a> for linear algebra
+functionality. This is a header-only C++ library, different from BLAS/LAPACK
+implementations and easier for distribution. For parallel execution, TensorFlow
+does use OpenMP. It is statically linked rather than vendored.</p>
+<p>Deep learning libraries are often their own "silo", providing all functionality
+in one coherent framework. When they are installed side-by-side with other
+packages, there are issues though with conflicting libraries. However, the
+problem is worse in the PyData stack. Here is what the situation look for just
+NumPy, SciPy and scikit-learn:</p>
+<p><img alt="Scikit-learn with dependencies - BLAS, LAPACK, OpenMP" src="../../../assets/images/blas_lapack_openmp.png#only-light" />
+<img alt="Scikit-learn with dependencies - BLAS, LAPACK, OpenMP" src="../../../assets/images/blas_lapack_openmp_darkmode.png#only-dark" /></p>
+<figcaption>
+Build and runtime dependencies for scikit-learn - showing how BLAS, LAPACK and
+OpenMP are included in an environment when installing either from wheels on
+PyPI, or from conda-forge or a similar such system that includes all required
+dependencies as separate packages.
+</figcaption>
+
+<p>As we can see, there are multiple issues that are unique to PyPI:</p>
+<ul>
+<li>We have multiple copies of OpenBLAS rather than just one. Also different
+  versions, breaking the "one version rule",</li>
+<li>No runtime switching of BLAS libraries, because of vendoring,</li>
+<li>Mixing pthreads and OpenMP parallelism, resulting in oversubscription issues,</li>
+<li>A diamond dependency, where NumPy and SciPy both depend on OpenBLAS. Making
+  upgrades that not synchronized harder, even if those projects will be able to
+  release a single OpenBLAS wheel in the future.</li>
+</ul>
+<p>When for example PyTorch is installed, the problems multiply - now we also have
+a second vendored OpenMP library in addition to two BLAS/LAPACK libraries.</p>
+<div class="admonition example">
+<p class="admonition-title">Example: PyTorch &amp; OpenMP</p>
+<p>PyTorch makes heavy use of OpenMP. And has a lot of issues with it - partly
+because OpenMP is inherently complex, and partly because of packaging
+limitations. One recurring problem is deadlocks in combination with
+<code>multiprocessing</code> (see, e.g.,
+<a href="https://github.com/pytorch/pytorch/issues/17199">pytorch#17199</a>).
+These are caused by the GCC implementation of OpenMP (<code>libgomp</code>) not being
+fork-safe, and <code>multiprocessing</code> defaulting to <code>'fork'</code>. The LLVM
+(<code>libomp</code>) and Intel (<code>libiomp</code>) implementations <em>are</em> fork-safe, therefore
+if the dependency could be expressed in package metadata, it would be
+easier to avoid the problem. The dependency of PyTorch on OpenMP is
+completely implicit in <code>pyproject.toml</code>/<code>setup.py</code> metadata however.</p>
+<p>Here is another example issue, where a PyTorch build inside a virtualenv
+picks up an OpenMP implementation in an uncontrolled fashion, because it's
+an implicit dependency and hence build results get affected by another
+package pulling in an OpenMP library: 
+<a href="https://github.com/pytorch/pytorch/issues/18398">pytorch#18398</a>.</p>
+<p><em>Note: there is an active discussion
+(<a href="https://github.com/python/cpython/issues/84559">cpython#84559</a>,
+<a href="https://discuss.python.org/t/switching-default-multiprocessing-context-to-spawn-on-posix-as-well/21868">Discourse thread</a> - Dec'22)
+to change the default <code>multiprocessing</code> context away from <code>'fork'</code>.</em></p>
+</div>
+<p>System package managers usually have a way of dealing with multiple
+implementations of an API, through building against a reference package with
+stubs as a "virtual dependency". This can be a generic mechanism, or specific
+to the dependency type.</p>
+<p>Conda manages BLAS, LAPACK and OpenMP (and other such complex dependencies,
+like MPI) through
+<a href="https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/packages.html#mutex-metapackages">mutex metapackages</a>,
+which ensure a single version of an implementation is installed and
+<a href="https://conda-forge.org/docs/maintainer/knowledge_base.html#switching-blas-implementation">allow users to switch between implementations</a>. Spack uses
+<a href="https://spack.readthedocs.io/en/latest/basic_usage.html#virtual-dependencies">virtual dependencies</a>
+which work in a similar fashion.</p>
+<p>Linux package managers may do something similar
+(e.g., Debian uses <code>update-alternatives</code>
+<a href="https://wiki.debian.org/DebianScience/LinearAlgebraLibraries">applied to <code>libblas</code> and <code>liblapack</code></a>),
+or they may use a more a more specific way of managing BLAS and LAPACK, such as
+<a href="https://docs.fedoraproject.org/en-US/packaging-guidelines/BLAS_LAPACK/#_user_level_selection">Fedora using Flexiblas</a>.</p>
+<h2 id="problems">Problems</h2>
+<ol>
+<li>Building from source is quite difficult. Dependencies on BLAS, LAPACK and
+   OpenMP cannot be expressed, and end users will typically not have it
+   installed, or they do have it but it's not found, or it's the wrong version.
+   In addition, variations between system package managers are not easy to
+   handle (e.g., Fedora fails to ship pkg-config files for OpenBLAS, Arch Linux
+   fails to include LAPACK in OpenBLAS, etc.).</li>
+<li>Building wheels is way too much work. Maintainers of each project using BLAS
+   and LAPACK are responsible for building it themselves (which is painful) and
+   then vendoring it. In addition, in the case of OpenBLAS, it requires
+   vendoring <code>libgfortran</code>.</li>
+<li>Deadlocks due to use of <code>multiprocessing</code> in combination with <code>libgomp</code>.</li>
+<li>Issues due to using more than one library of the same type. See for example
+   <a href="https://github.com/scipy/scipy/issues/15050">scipy#15050</a> (<em>"Performance
+   issue on macOS arm64 (M1) when installing from wheels (2x libopenblas)"</em>) and
+   <a href="https://github.com/xianyi/OpenBLAS/issues/3187">openblas#3187 </a>
+   (<em>"Slowdown when using openblas-pthreads alongside openmp based parallel code"</em>).</li>
+<li>As a result of the above-mentioned problems with OpenMP, SciPy bans usage of
+   OpenMP completely even though it would be of significant interest to use
+   OpenMP. Scikit-learn is gradually expanding its usage of OpenMP, but is
+   running into problems.</li>
+<li>No runtime switching of implementations when installing from wheels. This
+   makes testing, benchmarking and development work more difficult.</li>
+<li>MKL does provide wheels but cannot be linked to due to the wheel spec. And
+   MKL itself is &gt;100 MB in size, so vendoring it isn't reasonable.</li>
+</ol>
+<h2 id="history">History</h2>
+<p>TODO</p>
+<h2 id="relevant-resources">Relevant resources</h2>
+<ul>
+<li><a href="https://github.com/scipy/scipy/issues/10239#issuecomment-795030817">scipy#10239 - can OpenMP be used portably</a> </li>
+<li><a href="https://github.com/data-apis/array-api/issues/4">array-api#4 - Parallelism - what do libraries offer, and is there an API aspect to it</a></li>
+<li>OpenBLAS build config for vendoring into wheels:
+  <a href="https://github.com/MacPython/openblas-libs/">MacPython/openblas-libs</a></li>
+</ul>
+<h2 id="potential-solutions-or-mitigations">Potential solutions or mitigations</h2>
+<ul>
+<li>A mitigation to not make things worse: stay with the status quo, do not use
+  more OpenMP. Not a very satisfactory one though.</li>
+<li>
+<p>Build wheels for OpenBLAS and perhaps also OpenMP and maintain those on PyPI.</p>
+<ul>
+<li>
+<p>Issue: who takes responsibility for these, and decides on changes over
+  time (possibly breaking ones)?</p>
+</li>
+<li>
+<p>See this gradual evolution plan discussed between scikit-learn and SciPy
+  maintainers:
+  <a href="https://github.com/scipy/scipy/issues/15050#issuecomment-975318631">scipy#15050</a></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Larger changes to PyPI/wheels to get to parity with system package managers.
+  This will require dealing with several "meta topics", like
+  <a href="http://localhost:8000/meta-topics/no_build_farm/">a build farm</a> and
+  <a href="http://localhost:8000/meta-topics/pypi_social_model/">PyPI's author-led social model</a>,
+  in addition to implementing something like virtual packages.</p>
+</li>
+<li>Making it possible to express dependencies on libraries outside of PyPI.</li>
+<li>Making a distinction on PyPI between pure Python packages and other packages.
+  With the latter set of packages all being provided by a system package
+  manager.</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Note that it is possible to build OpenBLAS without LAPACK support. This is
+a bad idea, however Arch Linux does do this anyway (as of Dec 2022, see
+<a href="https://github.com/scipy/scipy/issues/17465">scipy#17465</a>).
+Accounting for such nonstandard choices by individual packagers of system
+dependencies makes dealing with native dependencies extra difficult.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 22, 2022</span>
+      
+        <br>
+        Created:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 20, 2022</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Native dependencies" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Native dependencies
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../geospatial_stack/" class="md-footer__link md-footer__link--next" aria-label="Next: The Geospatial stack" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              The Geospatial stack
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022 Quansight Labs & open source contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native/blob/main/LICENSE" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 10a3.04 3.04 0 0 1 3-3 3.04 3.04 0 0 1 3 3 3.04 3.04 0 0 1-3 3 3.04 3.04 0 0 1-3-3m3 9 4 1v-3.08A7.54 7.54 0 0 1 12 18a7.54 7.54 0 0 1-4-1.08V20m4-16a5.78 5.78 0 0 0-4.24 1.74A5.78 5.78 0 0 0 6 10a5.78 5.78 0 0 0 1.76 4.23A5.78 5.78 0 0 0 12 16a5.78 5.78 0 0 0 4.24-1.77A5.78 5.78 0 0 0 18 10a5.78 5.78 0 0 0-1.76-4.26A5.78 5.78 0 0 0 12 4m8 6a8.04 8.04 0 0 1-.57 2.8A7.84 7.84 0 0 1 18 15.28V23l-6-2-6 2v-7.72A7.9 7.9 0 0 1 4 10a7.68 7.68 0 0 1 2.33-5.64A7.73 7.73 0 0 1 12 2a7.73 7.73 0 0 1 5.67 2.36A7.68 7.68 0 0 1 20 10Z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["header.autohide"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

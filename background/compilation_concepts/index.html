@@ -1,0 +1,1354 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Basic code compilation concepts - pypackaging-native</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#basic-code-compilation-concepts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="pypackaging-native" class="md-header__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pypackaging-native
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Basic code compilation concepts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pypackaging-native" class="md-nav__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    pypackaging-native
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Meta topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Meta topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Meta topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/build_steps_conceptual/" class="md-nav__link">
+        Build & package management concepts and terminology
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/purposes_of_pypi/" class="md-nav__link">
+        The multiple purposes of PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/pypi_social_model/" class="md-nav__link">
+        PyPI's author-led social model and its limitations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/no_build_farm/" class="md-nav__link">
+        Lack of a build farm for PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/user_expectations_wheels/" class="md-nav__link">
+        Expectations that projects provide ever more wheels
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Key issues
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Key issues" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Key issues
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          Native dependencies
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Native dependencies" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          Native dependencies
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/native-dependencies/" class="md-nav__link">
+        Native dependencies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/native-dependencies/blas_openmp/" class="md-nav__link">
+        BLAS, LAPACK and OpenMP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/native-dependencies/geospatial_stack/" class="md-nav__link">
+        The Geospatial stack
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/native-dependencies/cpp_deps/" class="md-nav__link">
+        Complex C++ dependencies
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/abi/" class="md-nav__link">
+        Depending on packages for which an ABI matters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/gpus/" class="md-nav__link">
+        Packaging projects with GPU code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/pypi_metadata_handling/" class="md-nav__link">
+        Metadata handling on PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/simd_support/" class="md-nav__link">
+        Distributing a package containing SIMD code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/unexpected_fromsource_builds/" class="md-nav__link">
+        Unsuspecting users getting failing from-source builds
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../other_issues/" class="md-nav__link">
+        Other issues
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Background
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Background" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Background
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binary_interface/" class="md-nav__link">
+        Application Binary Interface (ABI)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Basic code compilation concepts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Basic code compilation concepts
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#symbols-mangling-and-linkers" class="md-nav__link">
+    Symbols, mangling and linkers
+  </a>
+  
+    <nav class="md-nav" aria-label="Symbols, mangling and linkers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symbols" class="md-nav__link">
+    Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbol-name-mangling" class="md-nav__link">
+    Symbol name mangling
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linkers" class="md-nav__link">
+    Linkers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-take-aways" class="md-nav__link">
+    Key take-aways
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-vs-static-libraries" class="md-nav__link">
+    Shared vs. static libraries
+  </a>
+  
+    <nav class="md-nav" aria-label="Shared vs. static libraries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-take-aways_1" class="md-nav__link">
+    Key take-aways
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#foreign-function-interface-ffi" class="md-nav__link">
+    Foreign-Function Interface (FFI)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transpilation" class="md-nav__link">
+    Transpilation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-compilation" class="md-nav__link">
+    Cross-compilation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-optimization" class="md-nav__link">
+    Performance optimization
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compiler-flags" class="md-nav__link">
+    Compiler flags
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#link-time-optimization-lto" class="md-nav__link">
+    Link-Time Optimization (LTO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#profile-guided-optimization-pgo" class="md-nav__link">
+    Profile-Guided Optimization (PGO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#binary-optimization-and-layout-tool-bolt" class="md-nav__link">
+    Binary Optimization and Layout Tool (BOLT)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/" class="md-nav__link">
+        References
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        Glossary
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#symbols-mangling-and-linkers" class="md-nav__link">
+    Symbols, mangling and linkers
+  </a>
+  
+    <nav class="md-nav" aria-label="Symbols, mangling and linkers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#symbols" class="md-nav__link">
+    Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbol-name-mangling" class="md-nav__link">
+    Symbol name mangling
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linkers" class="md-nav__link">
+    Linkers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-take-aways" class="md-nav__link">
+    Key take-aways
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-vs-static-libraries" class="md-nav__link">
+    Shared vs. static libraries
+  </a>
+  
+    <nav class="md-nav" aria-label="Shared vs. static libraries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-take-aways_1" class="md-nav__link">
+    Key take-aways
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#foreign-function-interface-ffi" class="md-nav__link">
+    Foreign-Function Interface (FFI)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transpilation" class="md-nav__link">
+    Transpilation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-compilation" class="md-nav__link">
+    Cross-compilation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-optimization" class="md-nav__link">
+    Performance optimization
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compiler-flags" class="md-nav__link">
+    Compiler flags
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#link-time-optimization-lto" class="md-nav__link">
+    Link-Time Optimization (LTO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#profile-guided-optimization-pgo" class="md-nav__link">
+    Profile-Guided Optimization (PGO)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#binary-optimization-and-layout-tool-bolt" class="md-nav__link">
+    Binary Optimization and Layout Tool (BOLT)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/pypackaging-native/pypackaging-native/edit/master/docs/background/compilation_concepts.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="basic-code-compilation-concepts">Basic code compilation concepts</h1>
+<details class="question">
+<summary>What does this have to do with Python?</summary>
+<p>Python as a glue language is essentially exposed to the sum of all problems
+that other languages have with their binary distribution, and this is a
+really vast field (even just for C/C++).</p>
+<p>Needless to say, adequately summarizing decades of work and developments
+that have lead us to where we are now is not easy. If you find errors or
+things to improve, please open an issue or PR!</p>
+</details>
+<p>In order to get a computer to execute a given unit of work (say, application <code>X</code>
+calling a function <code>f</code> from a previously compiled library <code>libfoo</code>), a lot of
+preconditions have to be met:</p>
+<ul>
+<li>The function needs to have been compiled into instructions that the
+  computer understands; a <em>symbol</em>.</li>
+<li>The symbol for <code>f</code> needs to be named (resp. "mangled") in a consistent manner
+  between the compilation of the current code (for <code>X</code>), resp. the compilation
+  of the library (<code>libfoo</code>, which contains the symbol for <code>f</code>).</li>
+<li>The symbol for <code>f</code> needs to have be discoverable from within the currently
+  running process; assuming <code>libfoo</code> is available on the machine where we are
+  compiling, this is ensured by the <em>linker</em>.</li>
+<li>Variables passed to the function need to be loaded into the right CPU
+  registers; this is highly dependent on the <em>calling convention</em> of a given
+  CPU, or rather, CPU family.</li>
+<li>The code (in <code>X</code>) calling a given symbol (e.g. for <code>f</code>) needs to be
+  excruciatingly compatible with the actual implementation of that symbol
+  (in <code>libfoo</code>).</li>
+</ul>
+<p>It's not useful for the average programmer to consider this level of detail
+when trying to get work done, but it is unfortunately unavoidable when
+considering the realities of packaging and distributing software as
+pre-compiled binary artifacts.</p>
+<h2 id="symbols-mangling-and-linkers">Symbols, mangling and linkers</h2>
+<h3 id="symbols">Symbols</h3>
+<p>For any given function <code>f</code> you might have written in a language that needs to
+be compiled (C, C++, ...), you can consider a symbol as a translation of your
+function to a level that can actually be executed by your computer.</p>
+<p>So, for example, a simple square function
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
+<p>will be <a href="https://godbolt.org/z/WT5Wa4bhq">translated</a> to the following assembly
+on x86-64 hardware:
+<div class="highlight"><pre><span></span><code><span class="nx">square</span><span class="o">:</span><span class="w"></span>
+<span class="w">        </span><span class="nx">push</span><span class="w">    </span><span class="nx">rbp</span><span class="w"></span>
+<span class="w">        </span><span class="nx">mov</span><span class="w">     </span><span class="nx">rbp</span><span class="o">,</span><span class="w"> </span><span class="nx">rsp</span><span class="w"></span>
+<span class="w">        </span><span class="nx">mov</span><span class="w">     </span><span class="nx">DWORD</span><span class="w"> </span><span class="nx">PTR</span><span class="w"> </span><span class="p">[</span><span class="nx">rbp</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">,</span><span class="w"> </span><span class="nx">edi</span><span class="w"></span>
+<span class="w">        </span><span class="nx">mov</span><span class="w">     </span><span class="nx">eax</span><span class="o">,</span><span class="w"> </span><span class="nx">DWORD</span><span class="w"> </span><span class="nx">PTR</span><span class="w"> </span><span class="p">[</span><span class="nx">rbp</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="w"></span>
+<span class="w">        </span><span class="nx">imul</span><span class="w">    </span><span class="nx">eax</span><span class="o">,</span><span class="w"> </span><span class="nx">eax</span><span class="w"></span>
+<span class="w">        </span><span class="nx">pop</span><span class="w">     </span><span class="nx">rbp</span><span class="w"></span>
+<span class="w">        </span><span class="nx">ret</span><span class="w"></span>
+</code></pre></div>
+There is a lot of ceremony for reading in the argument into a register, setting
+up another register for the result, while the actual work is done in:
+<div class="highlight"><pre><span></span><code><span class="w">        </span><span class="nx">imul</span><span class="w">    </span><span class="nx">eax</span><span class="o">,</span><span class="w"> </span><span class="nx">eax</span><span class="w"></span>
+</code></pre></div>
+If you click the link above, you will see that this assembly looks completely
+different when compiled for another processor architecture (e.g. arm64, as used
+in Apple M1 and newer).</p>
+<h3 id="symbol-name-mangling">Symbol name mangling</h3>
+<p>Note as well that, in C, the symbol <code>square</code> has exactly the same name as the
+function - there is a 1:1 relationship, or in other words, there is no "mangling"
+of the symbol name. This is because C has no concept of overloading functions
+(i.e. having different functions of the same name but different signatures).</p>
+<p>It also means that you can never change anything about a C symbol that has been
+distributed to consumers in binary form. We return to this in the
+<a href="../binary_interface/">background content about ABI</a>.</p>
+<p>In C++, the same function name can have several different signatures; for
+example
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">square</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">num</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+allows us to call <code>square</code> with all kinds of integer, floats, etc. The compiler
+will keep track of which flavor of the function has been used in the program
+and generate the respective symbols for each one of them. In order to
+distinguish these symbols, they get names that look like gibberish, but really
+simply bake the types of their input arguments into the identifier, so that we
+can ensure the right symbol gets called when we actually execute the function.
+For more details about the most widespread convention about this, see <a href="https://github.com/itanium-cxx-abi/cxx-abi">here</a>.</p>
+<h3 id="linkers">Linkers</h3>
+<p>When building an executable or a library, any code that references functions
+from third-party libraries needs to be resolved to the respective symbols, and
+those need to be found and copied into the executable, or alternatively, loaded
+at runtime.</p>
+<p>The tool for this job is called the linker, and it's a hopefully invisible task,
+at least, until things break (symbols not found, etc.). For an in-depth
+introduction to linkers see <a href="https://lwn.net/Articles/276782/">here</a>. Note that
+the field has evolved a lot since then, and new-generation linkers have appeared
+(see e.g. <a href="https://github.com/rui314/mold">mold</a>), but the basic operations have
+remained essentially unchanged.</p>
+<p>One crucial aspect about the way things have historically grown is that there
+is no name-spacing of these symbols in any way. All symbols are fully global,
+and this brings a lot of constraints. The linker will search for a given symbol
+within different paths on the system, in order, but this is obviously very
+fragile, in case symbols appear in several libraries on the linker path.</p>
+<h3 id="key-take-aways">Key take-aways</h3>
+<ul>
+<li>Functions are compiled into symbols.</li>
+<li>Symbol names are 1:1 with function names in C, mangled according to their
+  signature in C++.</li>
+<li>These symbols share a global name space.</li>
+<li>Symbols are picked by the linker in order of precedence on the path.</li>
+</ul>
+<h2 id="shared-vs-static-libraries">Shared vs. static libraries</h2>
+<p>From a high-level point of view, libraries are collections of symbols, and can
+come in two different flavors: static and dynamic. In very crude terms, static
+libraries are only useful at compile time (i.e. compiling an app <code>X</code> against a
+static library <code>libfoo</code> will copy the symbols from <code>libfoo</code> required by <code>X</code> into
+the final artifact), whereas for dynamic libraries, the symbols will only be
+<em>referenced</em>, and then loaded from the dynamic library at runtime.</p>
+<p>As a rough overview:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Static <code>libfoo</code></th>
+<th>Dynamic <code>libfoo</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compiling app <code>X</code></td>
+<td>Copies required symbols from <code>libfoo</code><br/>into final artifact for <code>X</code></td>
+<td>References required symbols from <code>libfoo</code></td>
+</tr>
+<tr>
+<td>Running app <code>X</code></td>
+<td>-</td>
+<td>Needs to load required symbols from <code>libfoo</code></td>
+</tr>
+<tr>
+<td>Storage footprints</td>
+<td>O(#libs) for libraries using a given symbol</td>
+<td>Symbol only saved once</td>
+</tr>
+<tr>
+<td>Binary Interface</td>
+<td>Self-contained</td>
+<td>Sensitive to ABI breaks</td>
+</tr>
+</tbody>
+</table>
+<p>The trade-offs involved here are very painful. Either we duplicate symbols for
+every artifact that uses them (and the bloat can be extreme, e.g. statically
+linking the MSVC runtime<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> can increase storage / memory footprint by 100MB),
+or we face the constraints of subjecting us to ABI stability, and finding the
+right symbols at runtime. For a further deep-dive into how Microsoft evolves its
+UCRT (Universal C Runtime), see <a href="https://mingwpy.github.io/ucrt.html">here</a>.</p>
+<p>In general, large parts of the wider computing ecosystem have found the
+duplication inherent in static libraries unacceptable, and would rather deal
+with the constraints of ABI stability. For example, standard functions like
+<code>printf</code> (or standard mathematical functions, or ...) are used so pervasively
+that copying those symbols into every produced binary would be extremely
+wasteful.</p>
+<p>It's worth noting that on Windows, symbols in shared libraries work quite
+differently than on unix. Due to various reasons, symbols on Windows have to be
+explicitly marked <code>__declspec(dllexport)</code> &amp; <code>__declspec(dllimport)</code> in the
+source with a macro that switches appropriately. This is quite an intrusive
+change for libraries aiming to be cross-platform, and the reason that several
+libraries developed primarily on unix do not support shared builds on Windows.
+Even using workarounds like <code>CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS</code> still doesn't
+cover all necessary symbols (e.g. global static data members).</p>
+<p>Using the latter may also have a performance impact, as it keeps the compiler
+from inlining calls to symbols that have been exported.</p>
+<h3 id="key-take-aways_1">Key take-aways</h3>
+<ul>
+<li>Static libraries are only useful at compile-time; they cause duplication of
+  symbols, but are much less susceptible to the intricacies of ABIs.</li>
+<li>Shared libraries need to be available both at compilation as well as at runtime,
+  solve the symbol duplication, but are extremely susceptible to ABI breaks.</li>
+<li>Due to the global symbol namespace, there can only be one version / build of
+  a shared library per environment (unless there is explicit versioning for the
+  symbols or libraries themselves, or for C++, explicitly different inline
+  namespaces are used).</li>
+</ul>
+<h2 id="foreign-function-interface-ffi">Foreign-Function Interface (FFI)</h2>
+<p>For any given task, a function may already exist in a library written in another
+language than the one at hand. In order to avoid rewriting (and maintaining)
+that functionality, it's desirable to have a way to call such functions from a
+"foreign" language. A common example are the BLAS/LAPACK routines, which are
+written in Fortran, but provide a C interface in addition to the Fortran one.</p>
+<p>In addition to the considerations above, this needs to ensure that the types
+between the language of the callee and the types of the language that the
+function is implemented in are transformed correctly.</p>
+<h2 id="transpilation">Transpilation</h2>
+<p>Many Python projects do not deal with C/C++ directly, but use transpilers like
+Cython or Pythran that <em>generate</em> C resp. C++ code from (quasi-)Python source
+code. Aside from almost always being exposed to the NumPy C API &amp; ABI, these
+modules compile into shared libraries themselves, with all the caveats
+mentioned above that this implies. However, few projects expose their
+cythonized functions as a C API, so there are generally fewer concerns about
+ABI stability in this scenario.</p>
+<h2 id="cross-compilation">Cross-compilation</h2>
+<p>Many projects use public CI services, which might not offer some of the more
+exotic or emerging architectures a project wants to support. This means that
+publishing binary artifacts for such architectures can often only be achieved
+with cross-compilation, i.e. compiling <em>on</em> one architecture (e.g., x86-64),
+<em>for</em> another (e.g., aarch64).</p>
+<p>A recent example where this was necessary at scale was the introduction of a
+new processor architecture for Apple's M1 notebooks, for which (almost) no CI
+agents were available. Distributors of packages for <code>linux-aarch64</code>,
+<code>linux-ppc64le</code> or <code>windows-arm64</code> are often in similar situations.</p>
+<p>The difficulty in cross-compilation is that it needs further attention to and
+separation (both conceptually, as well as in metadata) of the different
+requirements for the build environment (e.g. the necessary build tools that
+are executed on the x86-64 agent), as well as the host environment (i.e. the
+libraries that need to match the target architecture).</p>
+<p>Additionally, many build procedures assume they can execute arbitrary code
+(e.g. code generation) on the same architecture as the host, which is not a
+given in this case and may need to be worked around.</p>
+<h2 id="performance-optimization">Performance optimization</h2>
+<h3 id="compiler-flags">Compiler flags</h3>
+<p>TODO: Optimization levels; inlining functions; problems with <code>-Ofast</code></p>
+<p>For <code>-Ofast</code>, see in particular:
+https://github.com/conda-forge/conda-forge.github.io/issues/1824</p>
+<h3 id="link-time-optimization-lto">Link-Time Optimization (LTO)</h3>
+<p>In the search for speed, it's possible to do a whole-program analysis after
+everything has been compiled, and let the compiler identify which functions
+can be inlined. This is generally out of scope for Python packaging, because
+it is too involved. However, CPython release builds <a href="https://github.com/python/cpython/blob/main/README.rst#link-time-optimization">make use</a>
+of it.</p>
+<h3 id="profile-guided-optimization-pgo">Profile-Guided Optimization (PGO)</h3>
+<p>If a program is instrumented (compiled with tracking capabilities) to profile
+common usage patterns, it is possible to optimize the layout of the final
+artifact to ensure that hot paths get preferred in branch prediction. This is
+generally out of scope for Python packaging, because it is too involved. However,
+CPython release builds <a href="https://github.com/python/cpython/blob/main/README.rst#profile-guided-optimization">make use</a>
+of it.</p>
+<h3 id="binary-optimization-and-layout-tool-bolt">Binary Optimization and Layout Tool (BOLT)</h3>
+<p>Further optimization of the produced binary artifacts can be achieved by
+arranging their layout to avoid cache misses under profiled behavior. The
+respective <a href="https://github.com/llvm/llvm-project/blob/main/bolt/README.md">tool</a>
+is based on LLVM and still under heavy development, and not suitable for all
+usecases. It is generally out of scope for Python packaging, because it is too
+involved. However, CPython <a href="https://github.com/python/cpython/blob/main/Doc/using/configure.rst#performance-options">added</a>
+experimental support as of 3.12.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>This is an extreme example, but it is used in the wild, see e.g. <a href="https://github.com/protocolbuffers/protobuf/blob/v21.12/CMakeLists.txt#L70">protobuf</a>.
+Note that Microsoft itself <a href="https://devblogs.microsoft.com/cppblog/introducing-the-universal-crt/">discourages</a>
+this pattern, but still supports it:</p>
+<blockquote>
+<p>We strongly recommend against static linking of the Visual C++ libraries,
+for both performance and serviceability reasons, but we recognize that
+there are some use cases that require static libraries and we will continue
+to support the static libraries for those reasons.</p>
+</blockquote>
+<p><a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2022</span>
+      
+        <br>
+        Created:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2022</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../binary_interface/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Application Binary Interface (ABI)" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Application Binary Interface (ABI)
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../references/" class="md-footer__link md-footer__link--next" aria-label="Next: References" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              References
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022 Quansight Labs & open source contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native/blob/main/LICENSE" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 10a3.04 3.04 0 0 1 3-3 3.04 3.04 0 0 1 3 3 3.04 3.04 0 0 1-3 3 3.04 3.04 0 0 1-3-3m3 9 4 1v-3.08A7.54 7.54 0 0 1 12 18a7.54 7.54 0 0 1-4-1.08V20m4-16a5.78 5.78 0 0 0-4.24 1.74A5.78 5.78 0 0 0 6 10a5.78 5.78 0 0 0 1.76 4.23A5.78 5.78 0 0 0 12 16a5.78 5.78 0 0 0 4.24-1.77A5.78 5.78 0 0 0 18 10a5.78 5.78 0 0 0-1.76-4.26A5.78 5.78 0 0 0 12 4m8 6a8.04 8.04 0 0 1-.57 2.8A7.84 7.84 0 0 1 18 15.28V23l-6-2-6 2v-7.72A7.9 7.9 0 0 1 4 10a7.68 7.68 0 0 1 2.33-5.64A7.73 7.73 0 0 1 12 2a7.73 7.73 0 0 1 5.67 2.36A7.68 7.68 0 0 1 20 10Z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

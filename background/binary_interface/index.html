@@ -1,0 +1,1161 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Application Binary Interface (ABI) - pypackaging-native</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#application-binary-interface-abi" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="pypackaging-native" class="md-header__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pypackaging-native
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Application Binary Interface (ABI)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pypackaging-native" class="md-nav__button md-logo" aria-label="pypackaging-native" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    pypackaging-native
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pypackaging-native/pypackaging-native" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Meta topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Meta topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Meta topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/build_steps_conceptual/" class="md-nav__link">
+        Build & package management concepts and terminology
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/purposes_of_pypi/" class="md-nav__link">
+        The multiple purposes of PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/pypi_social_model/" class="md-nav__link">
+        PyPI's author-led social model and its limitations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/no_build_farm/" class="md-nav__link">
+        Lack of a build farm for PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meta-topics/user_expectations_wheels/" class="md-nav__link">
+        Expectations that projects provide ever more wheels
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Key issues
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Key issues" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Key issues
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_1">
+          Native dependencies
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Native dependencies" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_1">
+          <span class="md-nav__icon md-icon"></span>
+          Native dependencies
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/native-dependencies/" class="md-nav__link">
+        Native dependencies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/native-dependencies/blas_openmp/" class="md-nav__link">
+        BLAS, LAPACK and OpenMP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/native-dependencies/geospatial_stack/" class="md-nav__link">
+        The Geospatial stack
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/native-dependencies/cpp_deps/" class="md-nav__link">
+        Complex C++ dependencies
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/abi/" class="md-nav__link">
+        Depending on packages for which an ABI matters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/gpus/" class="md-nav__link">
+        Packaging projects with GPU code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/pypi_metadata_handling/" class="md-nav__link">
+        Metadata handling on PyPI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/simd_support/" class="md-nav__link">
+        Distributing a package containing SIMD code
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../key-issues/unexpected_fromsource_builds/" class="md-nav__link">
+        Unsuspecting users getting failing from-source builds
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../other_issues/" class="md-nav__link">
+        Other issues
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Background
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Background" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Background
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Application Binary Interface (ABI)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Application Binary Interface (ABI)
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#an-example-of-an-abi-break" class="md-nav__link">
+    An example of an ABI break
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interaction-with-shared-libraries" class="md-nav__link">
+    Interaction with shared libraries
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-different-levels-of-abi-breaks" class="md-nav__link">
+    The different levels of ABI breaks
+  </a>
+  
+    <nav class="md-nav" aria-label="The different levels of ABI breaks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abi-breaks-on-language-level" class="md-nav__link">
+    ABI breaks on language level
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abi-breaks-on-compiler-level" class="md-nav__link">
+    ABI breaks on compiler level
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abi-breaks-in-third-party-libraries" class="md-nav__link">
+    ABI breaks in third party libraries
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#abseil" class="md-nav__link">
+    Abseil
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compilation_concepts/" class="md-nav__link">
+        Basic code compilation concepts
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../references/" class="md-nav__link">
+        References
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        Glossary
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#an-example-of-an-abi-break" class="md-nav__link">
+    An example of an ABI break
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interaction-with-shared-libraries" class="md-nav__link">
+    Interaction with shared libraries
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-different-levels-of-abi-breaks" class="md-nav__link">
+    The different levels of ABI breaks
+  </a>
+  
+    <nav class="md-nav" aria-label="The different levels of ABI breaks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abi-breaks-on-language-level" class="md-nav__link">
+    ABI breaks on language level
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abi-breaks-on-compiler-level" class="md-nav__link">
+    ABI breaks on compiler level
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abi-breaks-in-third-party-libraries" class="md-nav__link">
+    ABI breaks in third party libraries
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#abseil" class="md-nav__link">
+    Abseil
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/pypackaging-native/pypackaging-native/edit/master/docs/background/binary_interface.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="application-binary-interface-abi">Application Binary Interface (ABI)</h1>
+<p>The Application Binary Interface (ABI) is a strange, emergent phenomenon.
+Neither the C nor C++ standard recognize its existence, however it is ubiquitous
+in discussions about the evolution of those standards.</p>
+<p>This is broadly because, in a world where everything always gets recompiled from
+scratch (essentially the purview of those standards), ABI would be irrelevant.
+However, reality has shown that the always-recompile model is not practical in
+the vast majority of contexts, and binary artifacts need to be distributed.</p>
+<p>As soon as this is attempted, we run into all the many potential problems that
+can appear at the interface between source code and the actual physical
+execution that is baked into an artifact. For some common terms, it's
+recommended to familiarize yourself with <a href="../compilation_concepts/">compilation concepts</a>
+first.</p>
+<p>Note that ABI appears for all distribution of binary artifacts, not just those
+compiled from C/C++. The concepts are the same in all cases though, so for
+brevity, we restrict ourselves to these languages here.</p>
+<p>A key focus for binary packaging systems is <em>maintaining binary compatibility</em>.
+If the packagers are not successful in maintaining that compability, we then get
+an <em>ABI break</em>, which can lead to crashes, segfaults, corrupted data etc.
+Unsurprisingly, a lot of effort goes into avoiding them.</p>
+<h2 id="an-example-of-an-abi-break">An example of an ABI break</h2>
+<p>Let's assume we are using a function <code>f</code> from a C library <code>libfoo</code>, and this
+function takes an argument of type <code>long long</code>.
+<div class="highlight"><pre><span></span><code><span class="k">extern</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="w"> </span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
+<p>If we inspect the assembly
+<div class="highlight"><pre><span></span><code><span class="nx">mov</span><span class="w">     </span><span class="nx">edi</span><span class="o">,</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="nx">call</span><span class="w">    </span><span class="nx">f</span><span class="w"></span>
+</code></pre></div>
+we see that a single register, <code>edi</code>, is used to pass the <code>value</code> argument to
+the function <code>f</code>, which makes sense since our registers are 64 bits wide, and
+<code>long long</code> matches this on unix platforms.</p>
+<p>If we replace the first line with <code>extern int f (__int128_t value);</code>, the
+assembly becomes:
+<div class="highlight"><pre><span></span><code><span class="nx">mov</span><span class="w">     </span><span class="nx">edi</span><span class="o">,</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="nx">xor</span><span class="w">     </span><span class="nx">esi</span><span class="o">,</span><span class="w"> </span><span class="nx">esi</span><span class="w"></span>
+<span class="nx">call</span><span class="w">    </span><span class="nx">f</span><span class="w"></span>
+</code></pre></div>
+Here we see that we now need two registers, <code>edi</code> and <code>esi</code>, to correctly pass
+<code>value</code> into the function <code>f</code>.</p>
+<p>Imagine then a situation where we did not change our code away from <code>long long</code>,
+but where the author of <code>libfoo</code> (that contains <code>f</code>) wants to upgrade to wider
+integers because their users are asking for that. If we upgrade the shared
+library <code>libfoo</code> (that our code is linked against) <em>without</em> recompilation of
+our own application, then our code would still run (because the linker would
+find a symbol with the right name <code>f</code> due to the lack of name mangling).
+However, because the artifact we had compiled expects <code>f</code> to take <code>long long</code>,
+it would only set up the <code>edi</code> register correctly, but the upgraded symbol for
+<code>f</code> would now use both <code>edi</code> and <code>esi</code>.</p>
+<p>If we're "lucky", this only leads to a crash, but it might lead to pretty much
+arbitrary behavior based on whatever happens to be in <code>esi</code>. This can include
+anything from wrong results to Heisenbugs based on any other code that might
+leave some random values in the <code>esi</code> register, all in a way that's generally
+extremely hard to debug.</p>
+<p>This is but a trivial example, there are innumerable ways for libraries you
+rely on to break their ABI, including:</p>
+<ul>
+<li>Changing anything about a function signature (C)</li>
+<li>Changing the function return type (C++)</li>
+<li>Changing (almost) anything about templating (C++)</li>
+<li>Adding a data member or virtual functions to a class</li>
+<li>Making something inline that previously wasn’t</li>
+<li>Changing your compiler or any of many relevant compilation flags</li>
+<li>Etc.</li>
+</ul>
+<h2 id="interaction-with-shared-libraries">Interaction with shared libraries</h2>
+<p>What the above means is that, bascially, you can never change anything about a
+C symbol that has been distributed to consumers in binary form, especially those
+in shared libraries. Since some code effectively must use shared libraries
+(not least the C standard library, in the form of glibc/<a href="https://musl.libc.org">musl</a>
+on linux, resp. the UCRT on Windows), this is one if not <em>the</em> reason for the
+importance of distributions, because those will ensure that all their packages
+are compiled consistently against a given version of libc (and other libraries
+like the C++ standard library).</p>
+<p>Similarly, this is why distributions only upgrade their glibc across major
+releases, because doing so for an LTS release would risk too much breakage,
+even though libc takes extreme care about remaining backwards compatible.</p>
+<h2 id="the-different-levels-of-abi-breaks">The different levels of ABI breaks</h2>
+<p>Fundamentally, ABI can break at pretty much any point that's involved in the
+computation of our program. For the sake of clarity, let us divide these into
+three different levels:</p>
+<ol>
+<li>ABI breaks in third-party libraries</li>
+<li>ABI breaks in compiler or due to compiler configuration</li>
+<li>ABI breaks in the language standard</li>
+</ol>
+<p>The further down we go this list, the more impactful an ABI break becomes, so
+much so that the latter two happen rarely if ever. When they do happen, they
+tend to leave long-lasting traces.</p>
+<h3 id="abi-breaks-on-language-level">ABI breaks on language level</h3>
+<p>The last substantial ABI break in C++ was when the standard committee decided
+to standardize an implementation of <code>std::string</code> that made illegal a previously
+deployed GCC-extension that used copy-on-write behavior. This meant that all
+C++ code compiled with GCC against older C++ standards needed to be recompiled.</p>
+<p>Due to the timelines involved with LTS distributions like RHEL, this took a long
+time to percolate through the ecosystem.</p>
+<p>Episodes like these have led to extreme reluctance in the C &amp; C++ committees to
+change anything that even remotely touches the ABI, even though there are often
+substantial improvements left on the table due to this (famously, <code>std::regex</code>
+is excruciatingly slow and cannot be fixed without breaking ABI). This leads to
+extreme scrutiny (and therefore sluggish pace) in standards development, which
+has its own knock-on effects (see section about Abseil below).</p>
+<p>This is also the reason why there are no larger integer types (e.g. <code>int128</code>)
+that are officially supported by the standard, because their introduction would
+be an ABI <a href="https://thephd.dev/intmax_t-hell-c++-c">break</a>. Generally, the
+contortions that the C/C++ committees put themselves through to avoid breaking
+ABI are <a href="https://thephd.dev/binary-banshees-digital-demons-abi-c-c++-help-me-god-please">spectacular</a>
+(and have very explicit opportunity costs)<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>, but ease ABI problems for the levels
+above.</p>
+<p>Finally, the unrealized performance gains left on the table due to ABI
+stability (and millions of dollar cost of single percentage performance
+pessimization) were what led Google to push hard for an ABI break in the C++
+committee, and their <a href="https://cor3ntin.github.io/posts/abi/">defeat</a> at the
+C++ meeting in Prague is ultimately what led to them withdrawing their
+substantial resources from compiler development (principally clang), and
+start their own C++-alike language, <a href="https://github.com/carbon-language/carbon-lang">Carbon</a>.</p>
+<h3 id="abi-breaks-on-compiler-level">ABI breaks on compiler level</h3>
+<p>For completeness, we need to distinguish that here we are not talking about
+ABI breaks in the compiler infrastructure (in many ways, compilers are less
+exposed because using them, i.e. recompiling, drastically lessens the exposure
+to ABI), but rather of ABI breaks in the artifacts produced by them.</p>
+<p>Generally, compiler authors are almost as reluctant to break ABI as the language
+committees, because the effects are largely the same. An exception was MSVC,
+which for a long time used to change the ABI it generated with every release,
+meaning that each Visual Studio release (before VS2015) required recompilation
+of all involved binary artifacts. Starting from VS2015 (up to including VS2022
+currently), MSVC has not broken ABI anymore, which means it's possible to, for
+example, compile with VS2019 against a shared library produced by VS2017.</p>
+<p>However, compilers expose a vast majority of flags, some of which have impacts
+on the ABI of the produced artifacts. It's therefore essential to have some
+degree of homogeneity (resp. control / auditability) about the compilation flags
+being used in an ecosystem.</p>
+<h3 id="abi-breaks-in-third-party-libraries">ABI breaks in third party libraries</h3>
+<p>This is the most common case; various libraries make different kinds of promises
+about the stability of their ABI. Some (certainly those lower in the stack, like
+OpenSSL) promise stringent ABI stability (except across major versions), whereas
+others might break ABI in every patch release.</p>
+<p>Knowing which library versions are compatible how is a pretty involved job, but
+services like <a href="https://abi-laboratory.pro/tracker/timeline/openssl">abi-laboratory</a>
+exist to ease this work.</p>
+<p>For distributions that focus on using shared libraries, this means they need to
+be able to track which packages are dependent on any given library, and then
+rebuild all those in a short timespan, in order to roll out a new version of
+that library (due to the fact that, absent explicit inline namespacing, there
+can only be one version of a shared library in any given environment).</p>
+<details class="note">
+<summary>Contrast with default approach in Python packaging</summary>
+<p>Because the standard packaging in Python (wheels) cannot express a
+dependency on non-Python artifacts, the default approach is to fully copy
+("vendor") the respective binaries into the wheel, and mangle their symbols
+in such a way that they do not get accidentally picked up from elsewhere.</p>
+</details>
+<h2 id="abseil">Abseil</h2>
+<p>Google's <a href="https://abseil.io/">Abseil</a> project fills a particular role, which is
+to backport advances in newer C++ standards, and make those facilities to
+projects that still need to compile with older standard versions (c.f. the speed
+of the standardization process due to ABI concerns above).</p>
+<p>One prominent example of such usage is <code>absl::string_view</code>, which backports the
+C++17 <code>std::string_view</code> back to C++11 &amp; C++14 (this feature allows to heavily
+cut down on useless copies involving strings, which has a substantial
+performance impact). However, these backports are generally not ABI-compatible
+with the implementations for later standard versions.</p>
+<p>This puts Abseil in the curious position that the C++ standard version used to
+compile it has an impact on its ABI. This is because Abseil will, by default,
+pick standard facilities when available, and otherwise fall back to its
+backports. As an example, <code>absl::string_view</code> compiled with C++17 will use the
+C++17 <code>std::string_view</code> ABI, whereas for C++14 and below, it will have a
+different ABI.</p>
+<p>Due to the constraint around having only one shared library per environment,
+Abseil strongly recommends against distribution of its binary artifacts,
+especially in shared builds. In fact, the only mode of operation that is really
+considered supported by upstream Abseil is compiling all dependencies with the
+same C++ standard version. This is obviously incompatible with servicing a large
+ecosystem, where some libraries might still require C++11, and some already
+require C++20.</p>
+<p>This issue would be <em>somewhat</em> manageable if Abseil types were only ever used
+internally in libraries, meaning things could be solved with a certain degree of
+care which (static) builds of Abseil are available at build time. However, the
+situation is exacerbated drastically by the fact that several projects are using
+(or beginning to use) Abseil types in their public API, e.g. <a href="https://developers.google.com/protocol-buffers/docs/news/2022-08-03#abseil-dep">protobuf</a>.</p>
+<p>In the worst case, this means a full bifurcation of the necessary builds, though
+more realistically, it means that all Abseil consumers more or less need to
+agree on a given ABI. Further alternatives <a href="https://github.com/conda-forge/abseil-cpp-feedstock/issues/45">exist</a>
+(e.g. <em>always</em> using the backport types, even if newer C++ standards are used),
+but are non-trivial to realize at scale.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Despite this article being very colorful, it's worth noting that it was
+written by the current editor of the C language, as well as a prolific
+proposal author for both C &amp; C++.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 30, 2022</span>
+      
+        <br>
+        Created:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2022</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../../other_issues/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Other issues" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Other issues
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../compilation_concepts/" class="md-footer__link md-footer__link--next" aria-label="Next: Basic code compilation concepts" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Basic code compilation concepts
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022 Quansight Labs & open source contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/pypackaging-native/pypackaging-native/blob/main/LICENSE" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 10a3.04 3.04 0 0 1 3-3 3.04 3.04 0 0 1 3 3 3.04 3.04 0 0 1-3 3 3.04 3.04 0 0 1-3-3m3 9 4 1v-3.08A7.54 7.54 0 0 1 12 18a7.54 7.54 0 0 1-4-1.08V20m4-16a5.78 5.78 0 0 0-4.24 1.74A5.78 5.78 0 0 0 6 10a5.78 5.78 0 0 0 1.76 4.23A5.78 5.78 0 0 0 12 16a5.78 5.78 0 0 0 4.24-1.77A5.78 5.78 0 0 0 18 10a5.78 5.78 0 0 0-1.76-4.26A5.78 5.78 0 0 0 12 4m8 6a8.04 8.04 0 0 1-.57 2.8A7.84 7.84 0 0 1 18 15.28V23l-6-2-6 2v-7.72A7.9 7.9 0 0 1 4 10a7.68 7.68 0 0 1 2.33-5.64A7.73 7.73 0 0 1 12 2a7.73 7.73 0 0 1 5.67 2.36A7.68 7.68 0 0 1 20 10Z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>
