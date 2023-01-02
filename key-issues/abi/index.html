@@ -8,8 +8,14 @@
       
       
       
+      
+        <link rel="prev" href="../native-dependencies/cpp_deps/">
+      
+      
+        <link rel="next" href="../gpus/">
+      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.0">
     
     
       
@@ -17,11 +23,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f79797b0.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -109,8 +114,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
@@ -118,8 +121,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -790,10 +791,9 @@
                 
                   
 
-  <a href="https://github.com/pypackaging-native/pypackaging-native/edit/master/docs/key-issues/abi.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="depending-on-packages-for-which-an-abi-matters">Depending on packages for which an ABI matters</h1>
@@ -840,92 +840,92 @@ install (which uses the Python and NumPy C APIs/ABIs) will show this:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">PyPI</label><label for="__tabbed_1_2">conda-forge</label><label for="__tabbed_1_3">Spack</label><label for="__tabbed_1_4">Arch Linux</label><label for="__tabbed_1_5">Homebrew</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>$ pipdeptree -p scipy
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>pipdeptree<span class="w"> </span>-p<span class="w"> </span>scipy
 <span class="nv">scipy</span><span class="o">==</span><span class="m">1</span>.9.3
-  - numpy <span class="o">[</span>required: &gt;<span class="o">=</span><span class="m">1</span>.18.5,&lt;<span class="m">1</span>.26.0, installed: <span class="m">1</span>.23.5<span class="o">]</span>
+<span class="w">  </span>-<span class="w"> </span>numpy<span class="w"> </span><span class="o">[</span>required:<span class="w"> </span>&gt;<span class="o">=</span><span class="m">1</span>.18.5,&lt;<span class="m">1</span>.26.0,<span class="w"> </span>installed:<span class="w"> </span><span class="m">1</span>.23.5<span class="o">]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>$ <span class="c1"># Note: output edited to remove duplicate packages and python&#39;s dependencies</span>
-$ mamba repoquery depends scipy --tree
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="c1"># Note: output edited to remove duplicate packages and python&#39;s dependencies</span>
+$<span class="w"> </span>mamba<span class="w"> </span>repoquery<span class="w"> </span>depends<span class="w"> </span>scipy<span class="w"> </span>--tree
 
 scipy<span class="o">[</span><span class="m">1</span>.9.3<span class="o">]</span>
-  ├─ libgfortran-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
-  │  └─ libgfortran5<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
-  ├─ libgcc-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
-  │  ├─ _libgcc_mutex<span class="o">[</span><span class="m">0</span>.1<span class="o">]</span>
-  │  └─ _openmp_mutex<span class="o">[</span><span class="m">4</span>.5<span class="o">]</span>
-  │     └─ llvm-openmp<span class="o">[</span><span class="m">14</span>.0.4<span class="o">]</span>
-  │        └─ libzlib<span class="o">[</span><span class="m">1</span>.2.13<span class="o">]</span>
-  ├─ libstdcxx-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
-  ├─ python_abi<span class="o">[</span><span class="m">3</span>.10<span class="o">]</span>
-  │  └─ python<span class="o">[</span><span class="m">3</span>.10.8<span class="o">]</span>
-  └─ numpy<span class="o">[</span><span class="m">1</span>.23.3<span class="o">]</span>
-     ├─ libblas<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
-     │  └─ libopenblas<span class="o">[</span><span class="m">0</span>.3.21<span class="o">]</span>
-     ├─ libcblas<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
-     ├─ liblapack<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
-  ├─ libblas already visited
-  ├─ liblapack already visited
+<span class="w">  </span>├─<span class="w"> </span>libgfortran-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">  </span>└─<span class="w"> </span>libgfortran5<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
+<span class="w">  </span>├─<span class="w"> </span>libgcc-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">  </span>├─<span class="w"> </span>_libgcc_mutex<span class="o">[</span><span class="m">0</span>.1<span class="o">]</span>
+<span class="w">  </span>│<span class="w">  </span>└─<span class="w"> </span>_openmp_mutex<span class="o">[</span><span class="m">4</span>.5<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>└─<span class="w"> </span>llvm-openmp<span class="o">[</span><span class="m">14</span>.0.4<span class="o">]</span>
+<span class="w">  </span>│<span class="w">        </span>└─<span class="w"> </span>libzlib<span class="o">[</span><span class="m">1</span>.2.13<span class="o">]</span>
+<span class="w">  </span>├─<span class="w"> </span>libstdcxx-ng<span class="o">[</span><span class="m">12</span>.1.0<span class="o">]</span>
+<span class="w">  </span>├─<span class="w"> </span>python_abi<span class="o">[</span><span class="m">3</span>.10<span class="o">]</span>
+<span class="w">  </span>│<span class="w">  </span>└─<span class="w"> </span>python<span class="o">[</span><span class="m">3</span>.10.8<span class="o">]</span>
+<span class="w">  </span>└─<span class="w"> </span>numpy<span class="o">[</span><span class="m">1</span>.23.3<span class="o">]</span>
+<span class="w">     </span>├─<span class="w"> </span>libblas<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
+<span class="w">     </span>│<span class="w">  </span>└─<span class="w"> </span>libopenblas<span class="o">[</span><span class="m">0</span>.3.21<span class="o">]</span>
+<span class="w">     </span>├─<span class="w"> </span>libcblas<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
+<span class="w">     </span>├─<span class="w"> </span>liblapack<span class="o">[</span><span class="m">3</span>.9.0<span class="o">]</span>
+<span class="w">  </span>├─<span class="w"> </span>libblas<span class="w"> </span>already<span class="w"> </span>visited
+<span class="w">  </span>├─<span class="w"> </span>liblapack<span class="w"> </span>already<span class="w"> </span>visited
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>$ <span class="c1"># Note: output edited to remove build-only dependencies</span>
-$ ./spack spec py-scipy%gcc
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="c1"># Note: output edited to remove build-only dependencies</span>
+$<span class="w"> </span>./spack<span class="w"> </span>spec<span class="w"> </span>py-scipy%gcc
 
-py-scipy@1.9.2%gcc@12.2.0 <span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
-    ^openblas@0.3.21%gcc@12.2.0~bignuma~consistent_fpcsr+fortran~ilp64+locking+pic+shared <span class="nv">symbol_suffix</span><span class="o">=</span>none <span class="nv">threads</span><span class="o">=</span>none <span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
-    ^python@3.9.13%gcc@12.2.0+bz2+ctypes+dbm~debug+libxml2+lzma~nis~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~tix~tkinter~ucs4+uuid+zlib <span class="nv">patches</span><span class="o">=</span>0d98e93,4c24573,f2fd060 <span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
-    ^py-numpy@1.23.3%gcc@12.2.0+blas+lapack <span class="nv">patches</span><span class="o">=</span>873745d <span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
+py-scipy@1.9.2%gcc@12.2.0<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
+<span class="w">    </span>^openblas@0.3.21%gcc@12.2.0~bignuma~consistent_fpcsr+fortran~ilp64+locking+pic+shared<span class="w"> </span><span class="nv">symbol_suffix</span><span class="o">=</span>none<span class="w"> </span><span class="nv">threads</span><span class="o">=</span>none<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
+<span class="w">    </span>^python@3.9.13%gcc@12.2.0+bz2+ctypes+dbm~debug+libxml2+lzma~nis~optimizations+pic+pyexpat+pythoncmd+readline+shared+sqlite3+ssl~tix~tkinter~ucs4+uuid+zlib<span class="w"> </span><span class="nv">patches</span><span class="o">=</span>0d98e93,4c24573,f2fd060<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
+<span class="w">    </span>^py-numpy@1.23.3%gcc@12.2.0+blas+lapack<span class="w"> </span><span class="nv">patches</span><span class="o">=</span>873745d<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>linux-endeavourosrolling-skylake_avx512
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>$ <span class="c1"># Note: output edited to remove duplicates and some transitive dependencies</span>
-$ pactree python-scipy
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="c1"># Note: output edited to remove duplicates and some transitive dependencies</span>
+$<span class="w"> </span>pactree<span class="w"> </span>python-scipy
 
 python-scipy
 └─python-numpy
-  ├─cblas
-  │ └─openblas provides blas
-  │   └─gcc-libs
-  │     └─glibc&gt;<span class="o">=</span><span class="m">2</span>.27
-  ├─lapack
-  │ └─openblas provides blas
-  └─python
-    ├─bzip2
-    │ ├─glibc
-    ├─expat
-    ├─gdbm
-    ├─libffi
-    ├─libnsl
-    ├─libxcrypt
-    ├─openssl
-    └─zlib
+<span class="w">  </span>├─cblas
+<span class="w">  </span>│<span class="w"> </span>└─openblas<span class="w"> </span>provides<span class="w"> </span>blas
+<span class="w">  </span>│<span class="w">   </span>└─gcc-libs
+<span class="w">  </span>│<span class="w">     </span>└─glibc&gt;<span class="o">=</span><span class="m">2</span>.27
+<span class="w">  </span>├─lapack
+<span class="w">  </span>│<span class="w"> </span>└─openblas<span class="w"> </span>provides<span class="w"> </span>blas
+<span class="w">  </span>└─python
+<span class="w">    </span>├─bzip2
+<span class="w">    </span>│<span class="w"> </span>├─glibc
+<span class="w">    </span>├─expat
+<span class="w">    </span>├─gdbm
+<span class="w">    </span>├─libffi
+<span class="w">    </span>├─libnsl
+<span class="w">    </span>├─libxcrypt
+<span class="w">    </span>├─openssl
+<span class="w">    </span>└─zlib
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>% <span class="c1"># Note: output edited to remove duplicate packages</span>
-% brew deps --tree --installed scipy
+<div class="highlight"><pre><span></span><code>%<span class="w"> </span><span class="c1"># Note: output edited to remove duplicate packages</span>
+%<span class="w"> </span>brew<span class="w"> </span>deps<span class="w"> </span>--tree<span class="w"> </span>--installed<span class="w"> </span>scipy
 
 scipy
-├── gcc
-│   ├── gmp
-│   ├── isl
-│   ├── libmpc
-│   ├── mpfr
-│   └── zstd
-│       ├── lz4
-│       └── xz
-├── numpy
-│   └── openblas
-│       └── gcc
-├── openblas
-│   └── gcc
-└── python@3.11
-    ├── mpdecimal
-    ├── openssl@1.1
-    ├── sqlite
-    └── xz
+├──<span class="w"> </span>gcc
+│<span class="w">   </span>├──<span class="w"> </span>gmp
+│<span class="w">   </span>├──<span class="w"> </span>isl
+│<span class="w">   </span>├──<span class="w"> </span>libmpc
+│<span class="w">   </span>├──<span class="w"> </span>mpfr
+│<span class="w">   </span>└──<span class="w"> </span>zstd
+│<span class="w">       </span>├──<span class="w"> </span>lz4
+│<span class="w">       </span>└──<span class="w"> </span>xz
+├──<span class="w"> </span>numpy
+│<span class="w">   </span>└──<span class="w"> </span>openblas
+│<span class="w">       </span>└──<span class="w"> </span>gcc
+├──<span class="w"> </span>openblas
+│<span class="w">   </span>└──<span class="w"> </span>gcc
+└──<span class="w"> </span>python@3.11
+<span class="w">    </span>├──<span class="w"> </span>mpdecimal
+<span class="w">    </span>├──<span class="w"> </span>openssl@1.1
+<span class="w">    </span>├──<span class="w"> </span>sqlite
+<span class="w">    </span>└──<span class="w"> </span>xz
 </code></pre></div>
 </div>
 </div>
@@ -957,11 +957,11 @@ version should be. Because of that, the
 metapackage is being used by projects that depend on <code>numpy</code> as an
 imperfect hack to obtain the correct <code>numpy==</code> build requirement pins per
 Python version and platform. It can be used like so:</p>
-<p><div class="highlight"><pre><span></span><code><span class="k">[build-system]</span><span class="w"></span>
-<span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">    </span><span class="s">&quot;oldest-supported-numpy&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># your other build requirements here</span><span class="w"></span>
-<span class="p">]</span><span class="w"></span>
+<p><div class="highlight"><pre><span></span><code><span class="k">[build-system]</span>
+<span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s">&quot;oldest-supported-numpy&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="c1"># your other build requirements here</span>
+<span class="p">]</span>
 </code></pre></div>
 Each time NumPy adds support for a new Python version or platform,
 <code>oldest-supported-numpy</code> is updated so that each user of the NumPy C API
@@ -1023,10 +1023,10 @@ versions), mixing binaries built with different compilers isn't possible.
 PyTorch does not attempt to provide a stable ABI; even bug fix releases
 aren't guaranteed to be compatible. As a result, all packages using
 PyTorch's C API must use a runtime requirement like:
-<div class="highlight"><pre><span></span><code><span class="k">[project]</span><span class="w"></span>
-<span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">    </span><span class="s">&quot;torch == X.Y.Z&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># X.Y.Z is the version of PyTorch used to build against</span><span class="w"></span>
-<span class="p">]</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">[project]</span>
+<span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s">&quot;torch == X.Y.Z&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># X.Y.Z is the version of PyTorch used to build against</span>
+<span class="p">]</span>
 </code></pre></div></p>
 <p>This requirement also implies <em>synchronized releases</em>. If PyTorch does a
 new release, the team ensures that simultaneous releases of <code>torchvision</code>,
@@ -1148,42 +1148,6 @@ unbroken, and hasn't been touched since.&#160;<a class="footnote-backref" href="
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../native-dependencies/cpp_deps/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Complex C++ dependencies" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Complex C++ dependencies
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../gpus/" class="md-footer__link md-footer__link--next" aria-label="Next: Packaging projects with GPU code" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Packaging projects with GPU code
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -1231,12 +1195,11 @@ unbroken, and hasn't been touched since.&#160;<a class="footnote-backref" href="
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide"], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>

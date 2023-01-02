@@ -8,8 +8,14 @@
       
       
       
+      
+        <link rel="prev" href="../geospatial_stack/">
+      
+      
+        <link rel="next" href="../../abi/">
+      
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.0">
     
     
       
@@ -17,11 +23,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.f79797b0.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -109,8 +114,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
@@ -118,8 +121,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -792,10 +793,9 @@
                 
                   
 
-  <a href="https://github.com/pypackaging-native/pypackaging-native/edit/master/docs/key-issues/native-dependencies/cpp_deps.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="complex-c-dependencies">Complex C++ dependencies</h1>
@@ -879,61 +879,61 @@ dependency tree in conda-forge and at the libraries vendored into a
 manylinux wheel on PyPI:</p>
 <details class="note">
 <summary>PyArrow dependency tree (conda-forge)</summary>
-<div class="highlight"><pre><span></span><code>$ <span class="c1"># Note: output edited to remove duplicate packages and python/numpy dependencies</span>
-$ mamba repoquery depends pyarrow --tree
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="c1"># Note: output edited to remove duplicate packages and python/numpy dependencies</span>
+$<span class="w"> </span>mamba<span class="w"> </span>repoquery<span class="w"> </span>depends<span class="w"> </span>pyarrow<span class="w"> </span>--tree
 
 pyarrow<span class="o">[</span><span class="m">9</span>.0.0<span class="o">]</span>
-  ├─ libgcc-ng<span class="o">[</span><span class="m">12</span>.2.0<span class="o">]</span>
-  │  ├─ _openmp_mutex<span class="o">[</span><span class="m">4</span>.5<span class="o">]</span>
-  │  │  ├─ _libgcc_mutex<span class="o">[</span><span class="m">0</span>.1<span class="o">]</span>
-  │  │  └─ libgomp<span class="o">[</span><span class="m">12</span>.2.0<span class="o">]</span>
-  ├─ libstdcxx-ng<span class="o">[</span><span class="m">12</span>.2.0<span class="o">]</span>
-  ├─ numpy<span class="o">[</span><span class="m">1</span>.23.5<span class="o">]</span>
-  ├─ parquet-cpp<span class="o">[</span><span class="m">1</span>.5.1<span class="o">]</span>
-  │  └─ arrow-cpp<span class="o">[</span><span class="m">9</span>.0.0<span class="o">]</span>
-  │     ├─ gflags<span class="o">[</span><span class="m">2</span>.2.2<span class="o">]</span>
-  │     ├─ c-ares<span class="o">[</span><span class="m">1</span>.18.1<span class="o">]</span>
-  │     ├─ libbrotlienc<span class="o">[</span><span class="m">1</span>.0.9<span class="o">]</span>
-  │     │  └─ libbrotlicommon<span class="o">[</span><span class="m">1</span>.0.9<span class="o">]</span>
-  │     ├─ libbrotlidec<span class="o">[</span><span class="m">1</span>.0.9<span class="o">]</span>
-  │     ├─ zstd<span class="o">[</span><span class="m">1</span>.5.2<span class="o">]</span>
-  │     ├─ aws-sdk-cpp<span class="o">[</span><span class="m">1</span>.8.186<span class="o">]</span>
-  │     │  ├─ aws-c-event-stream<span class="o">[</span><span class="m">0</span>.2.7<span class="o">]</span>
-  │     │  │  ├─ aws-c-common<span class="o">[</span><span class="m">0</span>.6.2<span class="o">]</span>
-  │     │  │  ├─ aws-checksums<span class="o">[</span><span class="m">0</span>.1.11<span class="o">]</span>
-  │     │  │  └─ aws-c-io<span class="o">[</span><span class="m">0</span>.10.5<span class="o">]</span>
-  │     │  │     ├─ aws-c-cal<span class="o">[</span><span class="m">0</span>.5.11<span class="o">]</span>
-  │     │  │     └─ s2n<span class="o">[</span><span class="m">1</span>.0.10<span class="o">]</span>
-  │     │  ├─ libcurl<span class="o">[</span><span class="m">7</span>.86.0<span class="o">]</span>
-  │     │  │  ├─ krb5<span class="o">[</span><span class="m">1</span>.19.3<span class="o">]</span>
-  │     │  │  │  ├─ libedit<span class="o">[</span><span class="m">3</span>.1.20191231<span class="o">]</span>
-  │     │  │  │  └─ keyutils<span class="o">[</span><span class="m">1</span>.6.1<span class="o">]</span>
-  │     │  │  ├─ libssh2<span class="o">[</span><span class="m">1</span>.10.0<span class="o">]</span>
-  │     │  │  └─ libnghttp2<span class="o">[</span><span class="m">1</span>.47.0<span class="o">]</span>
-  │     │  │     └─ libev<span class="o">[</span><span class="m">4</span>.33<span class="o">]</span>
-  │     ├─ lz4-c<span class="o">[</span><span class="m">1</span>.9.3<span class="o">]</span>
-  │     ├─ libthrift<span class="o">[</span><span class="m">0</span>.16.0<span class="o">]</span>
-  │     │  └─ libevent<span class="o">[</span><span class="m">2</span>.1.10<span class="o">]</span>
-  │     ├─ libutf8proc<span class="o">[</span><span class="m">2</span>.8.0<span class="o">]</span>
-  │     ├─ snappy<span class="o">[</span><span class="m">1</span>.1.9<span class="o">]</span>
-  │     ├─ re2<span class="o">[</span><span class="m">2022</span>.06.01<span class="o">]</span>
-  │     ├─ glog<span class="o">[</span><span class="m">0</span>.6.0<span class="o">]</span>
-  │     ├─ libabseil<span class="o">[</span><span class="m">20220623</span>.0<span class="o">]</span>
-  │     ├─ libprotobuf<span class="o">[</span><span class="m">3</span>.21.10<span class="o">]</span>
-  │     ├─ orc<span class="o">[</span><span class="m">1</span>.8.0<span class="o">]</span>
-  │     ├─ libgrpc<span class="o">[</span><span class="m">1</span>.49.1<span class="o">]</span>
-  │     │  ├─ zlib<span class="o">[</span><span class="m">1</span>.2.13<span class="o">]</span>
-  │     └─ libgoogle-cloud<span class="o">[</span><span class="m">2</span>.3.0<span class="o">]</span>
-  │        ├─ libcrc32c<span class="o">[</span><span class="m">1</span>.1.2<span class="o">]</span>
-  ├─ python_abi
-  ├─ python
-  ├─ numpy
-  └─ arrow-cpp
+<span class="w">  </span>├─<span class="w"> </span>libgcc-ng<span class="o">[</span><span class="m">12</span>.2.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">  </span>├─<span class="w"> </span>_openmp_mutex<span class="o">[</span><span class="m">4</span>.5<span class="o">]</span>
+<span class="w">  </span>│<span class="w">  </span>│<span class="w">  </span>├─<span class="w"> </span>_libgcc_mutex<span class="o">[</span><span class="m">0</span>.1<span class="o">]</span>
+<span class="w">  </span>│<span class="w">  </span>│<span class="w">  </span>└─<span class="w"> </span>libgomp<span class="o">[</span><span class="m">12</span>.2.0<span class="o">]</span>
+<span class="w">  </span>├─<span class="w"> </span>libstdcxx-ng<span class="o">[</span><span class="m">12</span>.2.0<span class="o">]</span>
+<span class="w">  </span>├─<span class="w"> </span>numpy<span class="o">[</span><span class="m">1</span>.23.5<span class="o">]</span>
+<span class="w">  </span>├─<span class="w"> </span>parquet-cpp<span class="o">[</span><span class="m">1</span>.5.1<span class="o">]</span>
+<span class="w">  </span>│<span class="w">  </span>└─<span class="w"> </span>arrow-cpp<span class="o">[</span><span class="m">9</span>.0.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>gflags<span class="o">[</span><span class="m">2</span>.2.2<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>c-ares<span class="o">[</span><span class="m">1</span>.18.1<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>libbrotlienc<span class="o">[</span><span class="m">1</span>.0.9<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>└─<span class="w"> </span>libbrotlicommon<span class="o">[</span><span class="m">1</span>.0.9<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>libbrotlidec<span class="o">[</span><span class="m">1</span>.0.9<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>zstd<span class="o">[</span><span class="m">1</span>.5.2<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>aws-sdk-cpp<span class="o">[</span><span class="m">1</span>.8.186<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>├─<span class="w"> </span>aws-c-event-stream<span class="o">[</span><span class="m">0</span>.2.7<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">  </span>├─<span class="w"> </span>aws-c-common<span class="o">[</span><span class="m">0</span>.6.2<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">  </span>├─<span class="w"> </span>aws-checksums<span class="o">[</span><span class="m">0</span>.1.11<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">  </span>└─<span class="w"> </span>aws-c-io<span class="o">[</span><span class="m">0</span>.10.5<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>aws-c-cal<span class="o">[</span><span class="m">0</span>.5.11<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">     </span>└─<span class="w"> </span>s2n<span class="o">[</span><span class="m">1</span>.0.10<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>├─<span class="w"> </span>libcurl<span class="o">[</span><span class="m">7</span>.86.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">  </span>├─<span class="w"> </span>krb5<span class="o">[</span><span class="m">1</span>.19.3<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">  </span>│<span class="w">  </span>├─<span class="w"> </span>libedit<span class="o">[</span><span class="m">3</span>.1.20191231<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">  </span>│<span class="w">  </span>└─<span class="w"> </span>keyutils<span class="o">[</span><span class="m">1</span>.6.1<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">  </span>├─<span class="w"> </span>libssh2<span class="o">[</span><span class="m">1</span>.10.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">  </span>└─<span class="w"> </span>libnghttp2<span class="o">[</span><span class="m">1</span>.47.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>│<span class="w">     </span>└─<span class="w"> </span>libev<span class="o">[</span><span class="m">4</span>.33<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>lz4-c<span class="o">[</span><span class="m">1</span>.9.3<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>libthrift<span class="o">[</span><span class="m">0</span>.16.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>└─<span class="w"> </span>libevent<span class="o">[</span><span class="m">2</span>.1.10<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>libutf8proc<span class="o">[</span><span class="m">2</span>.8.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>snappy<span class="o">[</span><span class="m">1</span>.1.9<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>re2<span class="o">[</span><span class="m">2022</span>.06.01<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>glog<span class="o">[</span><span class="m">0</span>.6.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>libabseil<span class="o">[</span><span class="m">20220623</span>.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>libprotobuf<span class="o">[</span><span class="m">3</span>.21.10<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>orc<span class="o">[</span><span class="m">1</span>.8.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>├─<span class="w"> </span>libgrpc<span class="o">[</span><span class="m">1</span>.49.1<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>│<span class="w">  </span>├─<span class="w"> </span>zlib<span class="o">[</span><span class="m">1</span>.2.13<span class="o">]</span>
+<span class="w">  </span>│<span class="w">     </span>└─<span class="w"> </span>libgoogle-cloud<span class="o">[</span><span class="m">2</span>.3.0<span class="o">]</span>
+<span class="w">  </span>│<span class="w">        </span>├─<span class="w"> </span>libcrc32c<span class="o">[</span><span class="m">1</span>.1.2<span class="o">]</span>
+<span class="w">  </span>├─<span class="w"> </span>python_abi
+<span class="w">  </span>├─<span class="w"> </span>python
+<span class="w">  </span>├─<span class="w"> </span>numpy
+<span class="w">  </span>└─<span class="w"> </span>arrow-cpp
 </code></pre></div>
 </details>
 <details class="note">
 <summary>PyArrow vendored libraries (PyPI wheels)</summary>
-<div class="highlight"><pre><span></span><code>$ ls pyarrow/*.so  <span class="c1"># pyarrow/ is from an unzipped manylinux wheel</span>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>ls<span class="w"> </span>pyarrow/*.so<span class="w">  </span><span class="c1"># pyarrow/ is from an unzipped manylinux wheel</span>
 /home/rgommers/Downloads/pyarrow/_compute.cpython-311-x86_64-linux-gnu.so
 /home/rgommers/Downloads/pyarrow/_csv.cpython-311-x86_64-linux-gnu.so
 /home/rgommers/Downloads/pyarrow/_dataset.cpython-311-x86_64-linux-gnu.so
@@ -1067,42 +1067,6 @@ for details.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back t
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../geospatial_stack/" class="md-footer__link md-footer__link--prev" aria-label="Previous: The Geospatial stack" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              The Geospatial stack
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../../abi/" class="md-footer__link md-footer__link--next" aria-label="Next: Depending on packages for which an ABI matters" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Depending on packages for which an ABI matters
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -1150,12 +1114,11 @@ for details.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back t
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["header.autohide"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["header.autohide"], "search": "../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>
