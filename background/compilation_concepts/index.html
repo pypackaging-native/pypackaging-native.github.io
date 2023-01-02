@@ -979,7 +979,7 @@
 that other languages have with their binary distribution, and this is a
 really vast field (even just for C/C++).</p>
 <p>Needless to say, adequately summarizing decades of work and developments
-that have lead us to where we are now is not easy. If you find errors or
+that have led us to where we are now is not easy. If you find errors or
 things to improve, please open an issue or PR!</p>
 </details>
 <p>In order to get a computer to execute a given unit of work (say, application <code>X</code>
@@ -991,7 +991,7 @@ preconditions have to be met:</p>
 <li>The symbol for <code>f</code> needs to be named (resp. "mangled") in a consistent manner
   between the compilation of the current code (for <code>X</code>), resp. the compilation
   of the library (<code>libfoo</code>, which contains the symbol for <code>f</code>).</li>
-<li>The symbol for <code>f</code> needs to have be discoverable from within the currently
+<li>The symbol for <code>f</code> needs to be discoverable from within the currently
   running process; assuming <code>libfoo</code> is available on the machine where we are
   compiling, this is ensured by the <em>linker</em>.</li>
 <li>Variables passed to the function need to be loaded into the right CPU
@@ -1048,7 +1048,7 @@ example
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">num</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-allows us to call <code>square</code> with all kinds of integer, floats, etc. The compiler
+allows us to call <code>square</code> with all kinds of integers, floats, etc. The compiler
 will keep track of which flavor of the function has been used in the program
 and generate the respective symbols for each one of them. In order to
 distinguish these symbols, they get names that look like gibberish, but really
@@ -1235,7 +1235,7 @@ to support the static libraries for those reasons.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 29, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 2, 2023</span>
       
         <br>
         Created:
