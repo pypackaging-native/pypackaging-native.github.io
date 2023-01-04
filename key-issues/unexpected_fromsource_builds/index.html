@@ -15,7 +15,7 @@
         <link rel="next" href="../../other_issues/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.0">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.2">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.f79797b0.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.f56500e0.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
@@ -888,8 +888,10 @@ install.</p>
    <a href="https://github.com/pypa/pip/issues/9140">pypa/pip#9140</a>.
    Also note that it's recommended to upload wheels even for projects that are
    pure Python, because installs are faster (metadata in a wheel is static, no
-   need to run `setup.py) - TODO: find reference (e.g. podcast Brett Cannon).
-   There are very few packages which would be unable to upload a wheel.</li>
+   need to run `setup.py - see
+   <a href="https://pradyunsg.me/blog/2022/12/31/wheels-are-faster-pure-python/">this blog post</a>
+   for a more detailed explanation). There are very few packages which would be
+   unable to upload a wheel.</li>
 <li>Let individual packages determine the behavior of installers (try to install
    from sdist, or error out) via metadata on PyPI somehow.</li>
 <li>Individual solutions for some of the separate issues. For example, reduce
@@ -904,7 +906,7 @@ install.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 20, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 4, 2023</span>
       
         <br>
         Created:
