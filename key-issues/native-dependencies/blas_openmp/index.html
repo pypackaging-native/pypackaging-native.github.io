@@ -15,7 +15,7 @@
         <link rel="next" href="../geospatial_stack/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.2">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.f56500e0.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6b71719e.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
@@ -252,12 +252,13 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_2">
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="false">
           Meta topics
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -358,12 +359,13 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
-      
-        <label class="md-nav__link" for="__nav_3">
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="true">
           Key issues
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -386,12 +388,13 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" checked>
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" checked>
       
       
       
-      
-        <label class="md-nav__link" for="__nav_3_1">
+        <label class="md-nav__link" for="__nav_3_1" tabindex="0" aria-expanded="true">
           Native dependencies
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -637,12 +640,13 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_5">
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
           Background
           <span class="md-nav__icon md-icon"></span>
         </label>
@@ -958,6 +962,35 @@ which work in a similar fashion.</p>
 <a href="https://wiki.debian.org/DebianScience/LinearAlgebraLibraries">applied to <code>libblas</code> and <code>liblapack</code></a>),
 or they may use a more a more specific way of managing BLAS and LAPACK, such as
 <a href="https://docs.fedoraproject.org/en-US/packaging-guidelines/BLAS_LAPACK/#_user_level_selection">Fedora using Flexiblas</a>.</p>
+<details class="info">
+<summary>BLAS/LAPACK demuxing<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>: FlexiBLAS, libblastrampoline &amp; SciPy's <code>cython_blas</code>/<code>cython_lapack</code></summary>
+<p>Supporting multiple BLAS and LAPACK libraries is quite challenging,
+because of API and ABI incompatibilities between them. In particular:</p>
+<ul>
+<li>API's using 32-bit (LP64) or 64-bit (ILP64) integers as indices of
+  vectors/matrices (see
+  <a href="https://en.wikipedia.org/wiki/64-bit_computing#64-bit_data_models">here</a>
+  for details). Typically a BLAS/LAPACK library supports both at the
+  source level, and how the library is built determines which one is used.
+  ILP64 builds may or may not use a symbol suffix - <code>64_</code> being the common
+  one, but that's not a universal convention.</li>
+<li>g77 vs. gfortran ABI. MKL and Apple Accelerate use the g77 ABI (or "f2c
+  calling convention"), while all other common libraries use the gfortran
+  ABI.</li>
+</ul>
+<p>In addition, libraries may implement different versions of the reference Netlib APIs,
+and CBLAS and LAPACKE support are not universal. To deal with this, a
+<em>demuxing library</em> (or wrapper library) may be a good solution. Its job is to
+provide a uniform API and ABI to any package using it. There are several
+examples of this: <a href="https://www.mpi-magdeburg.mpg.de/projects/flexiblas">FlexiBLAS</a><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>
+is a standalone library to do this at the C/Fortran level,
+<a href="https://github.com/JuliaLinearAlgebra/libblastrampoline">libblastrampoline</a>
+does this for Julia, and SciPy's <code>scipy.linalg.cython_[blas|lapack]</code> submodules
+provide a C/Cython interface to other Python packages.</p>
+<p>If other Python packages can accept a dependency on SciPy, that's their
+best option. SciPy itself has to deal with the full complexity of
+discovering and building against arbitrary BLAS/LAPACK libraries.</p>
+</details>
 <h2 id="problems">Problems</h2>
 <ol>
 <li>Building from source is quite difficult. Dependencies on BLAS, LAPACK and
@@ -1034,6 +1067,16 @@ a bad idea, however Arch Linux does do this anyway (as of Dec 2022, see
 Accounting for such nonstandard choices by individual packagers of system
 dependencies makes dealing with native dependencies extra difficult.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
+<li id="fn:2">
+<p>The term demuxing here stands for demultiplexing, in the sense of splitting a single
+"signal" (e.g. <em>multiply these two matrices</em>) into several channels for the various
+supported implementations of BLAS/LAPACK.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>Note that FlexiBLAS is GPLv3 licensed, with a LGPL-like runtime exception that only
+covers the Netlib-equivalent part of its API (that may not be enough, see
+<a href="https://github.com/scipy/scipy/issues/17362">scipy#17362</a>).&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
 </ol>
 </div>
 
@@ -1042,7 +1085,7 @@ dependencies makes dealing with native dependencies extra difficult.&#160;<a cla
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 22, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 7, 2023</span>
       
         <br>
         Created:
@@ -1114,10 +1157,10 @@ dependencies makes dealing with native dependencies extra difficult.&#160;<a cla
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["header.autohide"], "search": "../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["header.autohide"], "search": "../../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.ba449ae6.min.js"></script>
       
     
   </body>
