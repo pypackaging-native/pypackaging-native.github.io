@@ -839,10 +839,6 @@ to care about:</p>
   <a href="../native-dependencies/blas_openmp/">BLAS, LAPACK, OpenMP</a>,
   MPI<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> (see <a href="https://www.mpich.org/abi/">mpich.org/abi</a>).</li>
 </ul>
-<p>As an example of an ABI issue that many Python developers will encounter: a
-debug build of CPython is not ABI-compatible with a release build, hence if one
-wants to use a debug Python, one has to rebuild every package that uses the
-Python C API.</p>
 <p>For some more background on ABI, see <a href="../../background/binary_interface/">here</a>.</p>
 <h2 id="current-state">Current state</h2>
 <p>A package manager has to know about ABI, either implicitly or explicitly. In
@@ -1142,7 +1138,7 @@ unbroken, and hasn't been touched since.&#160;<a class="footnote-backref" href="
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 30, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 10, 2023</span>
       
         <br>
         Created:
